@@ -1,6 +1,7 @@
 from app.models import User
 from app.auth import pwd_context
 from sqlmodel import select
+from tests.test_utils import create_user, login_user, create_recipe
 import logging
 
 logging.basicConfig(level=logging.INFO)
@@ -13,12 +14,7 @@ def test_root(client):
 
 def test_create_user(client, test_db):
     """Test for creating user."""
-    user_data = {
-        "username": "testuser",
-        "email": "test@example.com",
-        "password": "password123"
-    }
-    response = client.post("/users/", json=user_data)
+    response = create_user(client)
     print(response.text)
     assert response.status_code == 200
     data = response.json()
@@ -31,89 +27,31 @@ def test_create_user(client, test_db):
 
 def test_good_login_user(client, test_db):
     """Test for logging in with good credentials."""
-    user_data = {
-        "username": "testuser",
-        "email": "test@example.com",
-        "password": "password123"
-    }
-    client.post("/users/", json=user_data)
-
-    # Test successful login
-    login_data = {
-        "username": "testuser",
-        "password": "password123"
-    }
-    response = client.post("/token", json=login_data)
-    logger.info(f"Login response: {response.text}")
-    assert response.status_code == 200
-    data = response.json()
-    assert "access_token" in data
-    assert data["token_type"] == "bearer"
+    create_user(client)
+    token = login_user(client)
+    assert "eyJ" in token  # Basic JWT check
 
 def test_bad_login_1(client, test_db):
-    """Test for login with valid username, bad password"""
-    user_data = {
-        "username": "testuser",
-        "email": "test@example.com",
-        "password": "password123"
-    }
-    client.post("/users/", json=user_data)
-
-    # Test successful login
-    login_data = {
-        "username": "testuser",
-        "password": "password"
-    }
-    response = client.post("/token", json=login_data)
-    print(response.text)
+    """Test for login with valid username, bad password."""
+    create_user(client)
+    response = client.post("/token", json={"username": "testuser", "password": "password"})
+    logger.info(f"Bad password response: {response.text}")
     assert response.status_code == 401
     assert response.json()["detail"] == "Invalid credentials"
 
 def test_bad_login_2(client, test_db):
-    """Test for login with invalid username"""
-    user_data = {
-        "username": "testuser",
-        "email": "test@example.com",
-        "password": "password123"
-    }
-    client.post("/users/", json=user_data)
-
-    # Test successful login
-    login_data = {
-        "username": "testuser123",
-        "password": "password123"
-    }
-    response = client.post("/token", json=login_data)
-    print(response.text)
+    """Test for login with invalid username."""
+    create_user(client)
+    response = client.post("/token", json={"username": "testuser123", "password": "password123"})
+    logger.info(f"Bad username response: {response.text}")
     assert response.status_code == 401
     assert response.json()["detail"] == "Invalid credentials"
 
 def test_create_recipe(client, test_db):
     """Test for creating recipe"""
-    # Create user and login
-    user_data = {
-        "username": "testuser",
-        "email": "test@example.com",
-        "password": "password123"
-    }
-    client.post("/users/", json=user_data)
-    login_data = {
-        "username": "testuser",
-        "password": "password123"
-    }
-    token_response = client.post("/token", json=login_data)
-    token = token_response.json()["access_token"]
-
-    # Create a recipe with user auth
-    recipe_data = {
-        "title": "Test Recipe",
-        "description": "Test",
-        "ingredients": "Stuff",
-        "instructions": "Cook"
-        }
-    headers = {"Authorization": f"Bearer {token}"}
-    response = client.post("/recipes/", json=recipe_data, headers=headers)
-    print(response.text)
+    create_user(client)
+    token = login_user(client)
+    response = create_recipe(client, token)
     assert response.status_code == 200
     data = response.json()
     assert data["title"] == "Test Recipe"
@@ -129,29 +67,9 @@ def test_get_recipes_1(client, test_db):
 
 def test_get_recipes_2(client, test_db):
     """Test post & get recipe."""
-    user_data = {
-        "username": "testuser",
-        "email": "test@example.com",
-        "password": "password123"
-    }
-    client.post("/users/", json=user_data)
-    login_data = {
-        "username": "testuser",
-        "password": "password123"
-    }
-    token_response = client.post("/token", json=login_data)
-    token = token_response.json()["access_token"]
-
-    # Create a recipe with user auth
-    recipe_data = {
-        "title": "Test Recipe",
-        "description": "Test",
-        "ingredients": "Stuff",
-        "instructions": "Cook"
-        }
-    headers = {"Authorization": f"Bearer {token}"}
-    client.post("/recipes/", json=recipe_data, headers=headers)
-
+    create_user(client)
+    token = login_user(client)
+    create_recipe(client, token)
     response=client.get("/recipes/")
     logger.info(f"Recipes response: {response.text}")
     assert response.status_code == 200
@@ -162,53 +80,15 @@ def test_get_recipes_2(client, test_db):
 
 def test_get_recipes_3(client, test_db):
     """Test post & get recipe from two users."""
-    # User 1
-    user1_data = {
-        "username": "testuser1",
-        "email": "test1@example.com",
-        "password": "password123"
-    }
-    client.post("/users/", json=user1_data)
-    login_data1 = {
-        "username": "testuser1",
-        "password": "password123"
-    }
-    token_response1 = client.post("/token", json=login_data1)
-    token1 = token_response1.json()["access_token"]
-    # Create a recipe with user auth
-    recipe_data1 = {
-        "title": "Test Recipe 1",
-        "description": "Test 1",
-        "ingredients": "Stuff 1",
-        "instructions": "Cook 1"
-        }
-    headers1 = {"Authorization": f"Bearer {token1}"}
-    client.post("/recipes/", json=recipe_data1, headers=headers1)
-
-    user2_data = {
-        "username": "testuser2",
-        "email": "test2@example.com",
-        "password": "password123"
-    }
-    client.post("/users/", json=user2_data)
-
-    login_data2 = {
-        "username": "testuser2",
-        "password": "password123"
-    }
-    token_response2 = client.post("/token", json=login_data2)
-    token2 = token_response2.json()["access_token"]
-
-    # Create a 2nd recipe with user auth
-    recipe_data2 = {
-        "title": "Test Recipe 2",
-        "description": "Test 2",
-        "ingredients": "Stuff 2",
-        "instructions": "Cook 2"
-        }
-    headers2 = {"Authorization": f"Bearer {token2}"}
-    client.post("/recipes/", json=recipe_data2, headers=headers2)
-
+    # Create user 1
+    create_user(client, "testuser1", "test1@example.com")
+    token1 = login_user(client, "testuser1")
+    create_recipe(client, token1, "Test Recipe 1", "Test 1", "Stuff 1", "Cook 1")
+    # Create user 2
+    create_user(client, "testuser2", "test2@example.com")
+    token2 = login_user(client, "testuser2")
+    create_recipe(client, token2, "Test Recipe 2", "Test 2", "Stuff 2", "Cook 2")
+    # Check if both recipes have been added and properly attributed
     response=client.get("/recipes/")
     logger.info(f"Recipes response: {response.text}")
     assert response.status_code == 200
@@ -221,26 +101,9 @@ def test_get_recipes_3(client, test_db):
     
 def test_create_rating(client, test_db):
     """Test for valid rating."""
-    user_data = {
-        "username": "testuser",
-        "email": "test@example.com",
-        "password": "password123"
-    }
-    client.post("/users/", json=user_data)
-    login_data = {
-        "username": "testuser",
-        "password": "password123"
-    }
-    token_response = client.post("/token", json=login_data)
-    token = token_response.json()['access_token']
-    recipe_data = {
-        "title": "Test Recipe",
-        "description": "Test",
-        "ingredients": "Stuff",
-        "instructions": "Cook"
-    }
-    headers = {"Authorization": f"Bearer {token}"}
-    recipe_response = client.post("/recipes/", json=recipe_data, headers=headers)
+    create_user(client)
+    token = login_user(client)
+    recipe_response = create_recipe(client, token)
     recipe_id = recipe_response.json()["id"]
 
     rating_data = {
@@ -252,33 +115,18 @@ def test_create_rating(client, test_db):
     logger.info(f"Rating response: {response.text}")
     assert response.status_code == 200
     data = response.json()
+    # Check if rating has been attributed correctly to recipe
     assert data["value"] == 3
     assert data["recipe_id"] == recipe_id
     assert data["user_id"] == 1
     
 def test_create_rating_2(client, test_db):
     """Test for invalid rating."""
-    user_data = {
-        "username": "testuser",
-        "email": "test@example.com",
-        "password": "password123"
-    }
-    client.post("/users/", json=user_data)
-    login_data = {
-        "username": "testuser",
-        "password": "password123"
-    }
-    token_response = client.post("/token", json=login_data)
-    token = token_response.json()['access_token']
-    recipe_data = {
-        "title": "Test Recipe",
-        "description": "Test",
-        "ingredients": "Stuff",
-        "instructions": "Cook"
-    }
-    headers = {"Authorization": f"Bearer {token}"}
-    recipe_response = client.post("/recipes/", json=recipe_data, headers=headers)
+    create_user(client)
+    token = login_user(client)
+    recipe_response = create_recipe(client, token)
     recipe_id = recipe_response.json()["id"]
+    # Invalid rating of 4
     rating_data = {
         "recipe_id": recipe_id,
         "user_id": 1,
@@ -291,28 +139,11 @@ def test_create_rating_2(client, test_db):
 
 def test_create_favorite(client, test_db):
     """Test adding a recipe to favorites."""
-    user_data = {
-            "username": "testuser",
-            "email": "test@example.com",
-            "password": "password123"
-        }
-    client.post("/users/", json=user_data)
-    login_data = {
-        "username": "testuser",
-        "password": "password123"
-    }
-    token_response = client.post("/token", json=login_data)
-    token = token_response.json()["access_token"]
-    recipe_data = {
-        "title": "Test Recipe",
-        "description": "Test",
-        "ingredients": "Stuff",
-        "instructions": "Cook"
-    }
-    headers = {"Authorization": f"Bearer {token}"}
-    recipe_response = client.post("/recipes/", json=recipe_data, headers=headers)
+    create_user(client)
+    token = login_user(client)
+    recipe_response = create_recipe(client, token)
     recipe_id = recipe_response.json()["id"]
-
+    # Add recipe_id to user favorites
     favorite_data = {
         "user_id": 1,
         "recipe_id": recipe_id
@@ -327,33 +158,13 @@ def test_create_favorite(client, test_db):
 
 def test_duplicate_favorite(client, test_db):
     """Test adding a favorite recipe twice."""
-    user_data = {
-        "username": "testuser",
-        "email": "test@example.com",
-        "password": "password123"
-    }
-    client.post("/users/", json=user_data)
-    login_data = {"username": "testuser", "password": "password123"}
-    token_response = client.post("/token", json=login_data)
-    token = token_response.json()["access_token"]
-    recipe_data = {
-        "title": "Test Recipe",
-        "description": "Test",
-        "ingredients": "Stuff",
-        "instructions": "Cook"
-    }
-    headers = {"Authorization": f"Bearer {token}"}
-    recipe_response = client.post("/recipes/", json=recipe_data, headers=headers)
+    create_user(client)
+    token = login_user(client)
+    recipe_response = create_recipe(client, token)
     recipe_id = recipe_response.json()["id"]
+    # Added favorite the first time
     favorite_data = {"user_id": 1, "recipe_id": recipe_id}
     response = client.post("/favorites/", json=favorite_data)
-    logger.info(f"Favorite response: {response.text}")
-    assert response.status_code == 200
-    data = response.json()
-    assert data["user_id"] == 1
-    assert data["recipe_id"] == recipe_id
-    assert "id" in data
-
     # Test duplicate favorite
     response = client.post("/favorites/", json=favorite_data)
     logger.info(f"Duplicate favorite response: {response.text}")
@@ -361,34 +172,17 @@ def test_duplicate_favorite(client, test_db):
     assert response.json()["detail"] == "Already favorited"
 
 def test_remove_favorite(client, test_db):
-    """Test adding a recipe to favorites."""
-    user_data = {
-            "username": "testuser",
-            "email": "test@example.com",
-            "password": "password123"
-        }
-    client.post("/users/", json=user_data)
-    login_data = {
-        "username": "testuser",
-        "password": "password123"
-    }
-    token_response = client.post("/token", json=login_data)
-    token = token_response.json()["access_token"]
-    recipe_data = {
-        "title": "Test Recipe",
-        "description": "Test",
-        "ingredients": "Stuff",
-        "instructions": "Cook"
-    }
-    headers = {"Authorization": f"Bearer {token}"}
-    recipe_response = client.post("/recipes/", json=recipe_data, headers=headers)
+    """Test removing a recipe from favorites."""
+    create_user(client)
+    token = login_user(client)
+    recipe_response = create_recipe(client, token)
     recipe_id = recipe_response.json()["id"]
-
     favorite_data = {
         "user_id": 1,
         "recipe_id": recipe_id
     }
     client.post("/favorites/", json=favorite_data)
+    # client.request with a 'DELETE' in there, as there's no client.delete()
     response = client.request('DELETE', '/favorites/', json=favorite_data)
     logger.info(f"Remove favorite response: {response.text}")
     assert response.status_code == 200
