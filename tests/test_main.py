@@ -266,6 +266,23 @@ def test_read_favorite(client, test_db):
     assert data["user_id"] == 1
     assert data["recipe_id"] == recipe_id
 
+def test_read_favorite_2(client, test_db):
+    """Test retrieving a non-existent user but valid recipe."""
+    create_user(client)
+    token = login_user(client)
+    recipe_response = create_recipe(client, token)
+    recipe_id = recipe_response.json()["id"]
+    # Add recipe_id to user favorites
+    favorite_data = {
+        "user_id": 2,
+        "recipe_id": recipe_id
+    }
+    client.post("/favorites/", json=favorite_data)
+    response = client.get(f"/favorites/?user_id=2&recipe_id={recipe_id}")
+    logger.info(f"Read rating response: {response.text}")
+    assert response.status_code == 404
+    assert response.json()["detail"] == "Favorite not found"
+
 def test_duplicate_favorite(client, test_db):
     """Test adding a favorite recipe twice."""
     create_user(client)

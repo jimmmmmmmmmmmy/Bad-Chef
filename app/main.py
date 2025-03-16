@@ -200,6 +200,19 @@ async def create_favorite(favorite: FavoriteCreate, session: Session = Depends(g
     session.refresh(db_favorite)
     return db_favorite
 
+@app.get("/favorites/", response_model=FavoriteRead)
+async def read_favorite(user_id: int, recipe_id: int, session: Session = Depends(get_session)):
+    """Retrieve a user's rating for a recipe."""
+    db_favorite = session.exec(
+        select(Favorite).where(
+            Favorite.user_id == user_id,
+            Favorite.recipe_id == recipe_id
+        )
+    ).first()
+    if not db_favorite:
+        raise HTTPException(status_code=404, detail="Favorite not found")
+    return db_favorite
+
 @app.delete("/favorites/", response_model=dict)
 async def remove_favorite(favorite: FavoriteCreate, session: Session = Depends(get_session)):
     """Removes a recipe from user favorites."""
