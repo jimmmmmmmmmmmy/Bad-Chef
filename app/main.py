@@ -124,6 +124,19 @@ async def create_rating(rating: RatingCreate, session: Session = Depends(get_ses
     session.refresh(db_rating)
     return db_rating
 
+@app.get("/ratings/", response_model=RatingRead)
+async def read_rating(user_id: int, recipe_id: int, session: Session = Depends(get_session)):
+    """Retrieve a user's rating for a recipe."""
+    db_rating = session.exec(
+        select(Rating).where(
+            Rating.user_id == user_id,
+            Rating.recipe_id == recipe_id
+        )
+    ).first()
+    if not db_rating:
+        raise HTTPException(status_code=404, detail="Rating not found")
+    return db_rating
+
 @app.delete("/ratings/", response_model=dict)
 async def remove_rating(rating: RatingCreate, session: Session = Depends(get_session)):
     db_rating = session.exec(
