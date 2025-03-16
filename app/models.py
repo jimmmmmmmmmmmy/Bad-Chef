@@ -1,6 +1,7 @@
 from sqlmodel import SQLModel, Field
 from typing import Optional
 from datetime import datetime
+import datetime as dt
 
 class User(SQLModel, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
@@ -15,7 +16,7 @@ class Recipe(SQLModel, table=True):
     ingredients: str # Potentially use JSON later
     instructions: str
     author_id: int = Field(foreign_key="user.id")
-    created_at: datetime = Field(default_factory=datetime.utcnow)
+    created_at: datetime = Field(default_factory=lambda: datetime.now(dt.UTC))
 
 class Rating(SQLModel, table=True):
     id: Optional[int] = Field(default=None, primary_key = True)
