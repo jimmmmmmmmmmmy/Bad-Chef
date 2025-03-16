@@ -22,7 +22,7 @@ class Rating(SQLModel, table=True):
     id: Optional[int] = Field(default=None, primary_key = True)
     recipe_id: int = Field(foreign_key="recipe.id")
     user_id: int = Field(foreign_key="user.id")
-    value: int = Field(ge=1, le=5) # 1 to 5 rating
+    value: int = Field(ge=1, le=3) # 1 to 3 rating
 
 class Favorite(SQLModel, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)

@@ -116,8 +116,8 @@ async def create_rating(rating: RatingCreate, session: Session = Depends(get_ses
     user = session.get(User, rating.user_id) # Verify user exists
     if not recipe or not user:
         raise HTTPException(status_code=404, detail="Recipe or User not found")
-    if rating.value < 1 or rating.value > 5:
-        raise HTTPException(status_code=400, detail="Rating must be between 1 and 5")
+    if rating.value < 1 or rating.value > 3:
+        raise HTTPException(status_code=400, detail="Rating must be between 1 and 3")
     db_rating = Rating(**rating.model_dump())
     session.add(db_rating)
     session.commit()
@@ -151,3 +151,4 @@ async def create_favorite(favorite: FavoriteCreate, session: Session = Depends(g
     session.commit()
     session.refresh(db_favorite)
     return db_favorite
+
