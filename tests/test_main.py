@@ -218,3 +218,179 @@ def test_get_recipes_3(client, test_db):
     assert data[0]["author_id"] == 1
     assert data[1]["title"] == "Test Recipe 2"
     assert data[1]["author_id"] == 2
+    
+def test_create_rating(client, test_db):
+    """Test for valid rating."""
+    user_data = {
+        "username": "testuser",
+        "email": "test@example.com",
+        "password": "password123"
+    }
+    client.post("/users/", json=user_data)
+    login_data = {
+        "username": "testuser",
+        "password": "password123"
+    }
+    token_response = client.post("/token", json=login_data)
+    token = token_response.json()['access_token']
+    recipe_data = {
+        "title": "Test Recipe",
+        "description": "Test",
+        "ingredients": "Stuff",
+        "instructions": "Cook"
+    }
+    headers = {"Authorization": f"Bearer {token}"}
+    recipe_response = client.post("/recipes/", json=recipe_data, headers=headers)
+    recipe_id = recipe_response.json()["id"]
+
+    rating_data = {
+        "recipe_id": recipe_id,
+        "user_id": 1,
+        "value": 3
+    }
+    response = client.post("/ratings/", json=rating_data)
+    logger.info(f"Rating response: {response.text}")
+    assert response.status_code == 200
+    data = response.json()
+    assert data["value"] == 3
+    assert data["recipe_id"] == recipe_id
+    assert data["user_id"] == 1
+    
+def test_create_rating_2(client, test_db):
+    """Test for invalid rating."""
+    user_data = {
+        "username": "testuser",
+        "email": "test@example.com",
+        "password": "password123"
+    }
+    client.post("/users/", json=user_data)
+    login_data = {
+        "username": "testuser",
+        "password": "password123"
+    }
+    token_response = client.post("/token", json=login_data)
+    token = token_response.json()['access_token']
+    recipe_data = {
+        "title": "Test Recipe",
+        "description": "Test",
+        "ingredients": "Stuff",
+        "instructions": "Cook"
+    }
+    headers = {"Authorization": f"Bearer {token}"}
+    recipe_response = client.post("/recipes/", json=recipe_data, headers=headers)
+    recipe_id = recipe_response.json()["id"]
+    rating_data = {
+        "recipe_id": recipe_id,
+        "user_id": 1,
+        "value": 4
+    }
+    response = client.post("/ratings/", json=rating_data)
+    logger.info(f"Invalid response: {response.text}")
+    assert response.status_code == 400
+    assert response.json()["detail"] == "Rating must be between 1 and 3"
+
+def test_create_favorite(client, test_db):
+    """Test adding a recipe to favorites."""
+    user_data = {
+            "username": "testuser",
+            "email": "test@example.com",
+            "password": "password123"
+        }
+    client.post("/users/", json=user_data)
+    login_data = {
+        "username": "testuser",
+        "password": "password123"
+    }
+    token_response = client.post("/token", json=login_data)
+    token = token_response.json()["access_token"]
+    recipe_data = {
+        "title": "Test Recipe",
+        "description": "Test",
+        "ingredients": "Stuff",
+        "instructions": "Cook"
+    }
+    headers = {"Authorization": f"Bearer {token}"}
+    recipe_response = client.post("/recipes/", json=recipe_data, headers=headers)
+    recipe_id = recipe_response.json()["id"]
+
+    favorite_data = {
+        "user_id": 1,
+        "recipe_id": recipe_id
+    }
+    response = client.post("/favorites/", json=favorite_data)
+    logger.info(f"Favorite response: {response.text}")
+    assert response.status_code == 200
+    data = response.json()
+    assert data["user_id"] == 1
+    assert data["recipe_id"] == recipe_id
+    assert "id" in data
+
+def test_duplicate_favorite(client, test_db):
+    """Test adding a favorite recipe twice."""
+    user_data = {
+        "username": "testuser",
+        "email": "test@example.com",
+        "password": "password123"
+    }
+    client.post("/users/", json=user_data)
+    login_data = {"username": "testuser", "password": "password123"}
+    token_response = client.post("/token", json=login_data)
+    token = token_response.json()["access_token"]
+    recipe_data = {
+        "title": "Test Recipe",
+        "description": "Test",
+        "ingredients": "Stuff",
+        "instructions": "Cook"
+    }
+    headers = {"Authorization": f"Bearer {token}"}
+    recipe_response = client.post("/recipes/", json=recipe_data, headers=headers)
+    recipe_id = recipe_response.json()["id"]
+    favorite_data = {"user_id": 1, "recipe_id": recipe_id}
+    response = client.post("/favorites/", json=favorite_data)
+    logger.info(f"Favorite response: {response.text}")
+    assert response.status_code == 200
+    data = response.json()
+    assert data["user_id"] == 1
+    assert data["recipe_id"] == recipe_id
+    assert "id" in data
+
+    # Test duplicate favorite
+    response = client.post("/favorites/", json=favorite_data)
+    logger.info(f"Duplicate favorite response: {response.text}")
+    assert response.status_code == 400
+    assert response.json()["detail"] == "Already favorited"
+
+def test_remove_favorite(client, test_db):
+    """Test adding a recipe to favorites."""
+    user_data = {
+            "username": "testuser",
+            "email": "test@example.com",
+            "password": "password123"
+        }
+    client.post("/users/", json=user_data)
+    login_data = {
+        "username": "testuser",
+        "password": "password123"
+    }
+    token_response = client.post("/token", json=login_data)
+    token = token_response.json()["access_token"]
+    recipe_data = {
+        "title": "Test Recipe",
+        "description": "Test",
+        "ingredients": "Stuff",
+        "instructions": "Cook"
+    }
+    headers = {"Authorization": f"Bearer {token}"}
+    recipe_response = client.post("/recipes/", json=recipe_data, headers=headers)
+    recipe_id = recipe_response.json()["id"]
+
+    favorite_data = {
+        "user_id": 1,
+        "recipe_id": recipe_id
+    }
+    client.post("/favorites/", json=favorite_data)
+    response = client.request('DELETE', '/favorites/', json=favorite_data)
+    logger.info(f"Remove favorite response: {response.text}")
+    assert response.status_code == 200
+    data = response.json()
+    assert data["message"] == f"Favorite (user_id=1, recipe_id={recipe_id}) removed successfully"
