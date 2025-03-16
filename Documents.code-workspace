@@ -1,0 +1,13 @@
+{
+    "folders": [
+        {
+            "path": ".."
+        }
+    ],
+    "settings": {
+        "python.pythonPath": "/Users/jamesliu/Library/Caches/pypoetry/virtualenvs/recipe-platform-1b4wyS06-py3.13/bin/python",
+        "python.analysis.extraPaths": [
+            "/Users/jamesliu/Library/Caches/pypoetry/virtualenvs/recipe-platform-1b4wyS06-py3.13/lib/python3.13/site-packages"
+        ]
+    }
+}
