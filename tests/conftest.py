@@ -7,8 +7,6 @@ import pytest
 from fastapi.testclient import TestClient
 from sqlmodel import SQLModel, create_engine, Session
 from app.main import app as fastapi_app, get_session
-from app.database import create_db_and_tables
-import app.models
 
 @pytest.fixture(scope="function")
 def test_engine():

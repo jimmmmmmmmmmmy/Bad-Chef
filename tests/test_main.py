@@ -1,4 +1,3 @@
-import pytest
 from app.models import User
 from app.auth import pwd_context
 from sqlmodel import select

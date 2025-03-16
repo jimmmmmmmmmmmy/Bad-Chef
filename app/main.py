@@ -6,7 +6,6 @@ from app.auth import create_access_token, get_current_user, pwd_context
 from app.database import get_session, create_db_and_tables, engine
 from pydantic import BaseModel
 from typing import Optional, List
-from datetime import datetime
 import logging
 
 logging.basicConfig(level=logging.INFO)

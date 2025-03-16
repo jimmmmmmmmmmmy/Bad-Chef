@@ -1,5 +1,5 @@
 from sqlmodel import SQLModel, Field
-from typing import Optional, List
+from typing import Optional
 from datetime import datetime
 
 class User(SQLModel, table=True):
