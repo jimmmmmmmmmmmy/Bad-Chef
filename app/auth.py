@@ -1,12 +1,3 @@
-import warnings
-
-warnings.filterwarnings(
-    "ignore",
-    message=".*trapped.*error reading bcrypt version",
-    category=UserWarning,
-    module="passlib.handlers.bcrypt"
-)
-
 from fastapi import Depends, HTTPException, status
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 import jwt
@@ -18,19 +9,22 @@ from app import models
 from typing import Optional
 import os
 from dotenv import load_dotenv
+
 # Load environment variables
 load_dotenv()
 
-SECRET_KEY = os.getenv("SECRET_KEY") 
+SECRET_KEY = os.getenv("SECRET_KEY") # JWT signing from .env
 ALGORITHM = "HS256"
 EXPIRATION_MINUTES = 30
 
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+# Password hashing
+pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto") 
 
 # Define HTTPBearer scheme for JWT
 oauth2_scheme = HTTPBearer()
 
 def create_access_token(data: dict, expires_delta: Optional[timedelta] = None) -> str:
+    """Create JWT access token with an expiration date."""
     to_encode = data.copy()
     if expires_delta:
         expire = datetime.now(timezone.utc) + expires_delta
@@ -44,7 +38,8 @@ async def get_current_user(
     credentials: HTTPAuthorizationCredentials = Depends(oauth2_scheme),
     session: Session = Depends(get_session)
 ) -> models.User:
-    token = credentials.credentials
+    """Retrieve current authenticated user from JWT token"""
+    token = credentials.credentials # Extract token from auth header
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
         username: str = payload.get("sub")

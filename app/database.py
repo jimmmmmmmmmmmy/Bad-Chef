@@ -6,9 +6,10 @@ DATABASE_URL = "sqlite:///recipes.db"
 engine = create_engine(DATABASE_URL, echo=True)
 
 def create_db_and_tables(db_engine: Engine = engine):
+    """Creates all DB tables defined in models"""
     SQLModel.metadata.create_all(db_engine)
 
-# Dependency to get a database session
 def get_session():
+    """YIelds a database session for FastAPI."""
     with Session(engine) as session:
         yield session

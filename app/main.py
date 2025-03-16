@@ -14,18 +14,21 @@ logger = logging.getLogger(__name__)
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    create_db_and_tables(engine)
+    """Manages the application lifespan by creating DB tables on startup."""
+    create_db_and_tables(engine) # Create DB schema before app starts
     yield
 
 app = FastAPI(lifespan=lifespan)
 
 # Login Endpoint
 class LoginRequest(BaseModel):
+    """Defines login request data"""
     username: str
     password: str
 
 @app.post("/token")
 async def login(request: LoginRequest, session: Session = Depends(get_session)):
+    """Handles user login and returns access token."""
     user = session.exec(select(User).where(User.username == request.username)).first()
     if not user or not pwd_context.verify(request.password, user.hashed_password):
         raise HTTPException(status_code=401, detail="Invalid credentials")
@@ -34,29 +37,30 @@ async def login(request: LoginRequest, session: Session = Depends(get_session)):
 
 @app.get("/")
 async def root():
+    """Welcome messgae for API root endpoint."""
     return {"message": "Welcome to the Recipe Platform API"}
 
-# User Creation Endpoint, Pydantic-style for input validation
 class UserCreate(SQLModel):
+    """Structure for creating a new user."""
     username: str
     email: str
     password: str
 
-# User Response for test
 class UserResponse(SQLModel):
+    """Structure for user response data."""
     username: str
     email: str
     id: Optional[int] = None
 
 @app.post("/users/", response_model=UserResponse)
 async def create_user(user: UserCreate, session: Session = Depends(get_session)):
+    """Creates a new user in database."""
     db_user = User(username=user.username, email=user.email, hashed_password=pwd_context.hash(user.password))
     session.add(db_user)
     session.commit()
-    session.refresh(db_user)
+    session.refresh(db_user) # Reload the user to add auto-generated fields
     return db_user  # Automatically maps to UserResponse
 
-# Recipe Recreation Endpoint
 class RecipeCreate(SQLModel):
     """Input model for creating a recipe."""
     title: str
@@ -67,15 +71,19 @@ class RecipeCreate(SQLModel):
 
 class RecipeRead(Recipe):
     """Response model including auto-generated fields for id & created_at"""
+    # Empty for now
     pass
 
 @app.post("/recipes/", response_model=RecipeRead)
 async def create_recipe(recipe: RecipeCreate, session: Session = Depends(get_session), current_user: User = Depends(get_current_user)):
+    """Recipe creation for current user."""
     logger.info(f"Creating recipe for user: {current_user.username}, ID: {current_user.id}")
     try:
-        db_recipe = Recipe(**recipe.model_dump(), author_id=current_user.id)
+        # Unpack recipe data and add author
+        db_recipe = Recipe(**recipe.model_dump(), author_id=current_user.id) 
         session.add(db_recipe)
         session.commit()
+        # Refresh for auto-generated fields
         session.refresh(db_recipe)
         logger.info(f"Recipe created: {db_recipe.id}")
         return db_recipe
@@ -86,24 +94,27 @@ async def create_recipe(recipe: RecipeCreate, session: Session = Depends(get_ses
 # Recipe Browsing Endpoint
 @app.get("/recipes/", response_model=List[RecipeRead])
 async def get_recipes(session: Session = Depends(get_session)):
+    """Retrieve all recipes from database."""
     statement = select(Recipe) # SQLModel select to query all recipes
     recipes = session.exec(statement).all()
     return recipes # Return as list for RecipeRead format
 
 # Rating Creation Endpoint
 class RatingCreate(SQLModel):
+    """Structure for creating a recipe rating."""
     recipe_id: int
     user_id: int
     value: int
 
 class RatingRead(Rating):
+    """Response model for reading rating data."""
     pass
 
 @app.post("/ratings/", response_model=RatingRead)
 async def create_rating(rating: RatingCreate, session: Session = Depends(get_session)):
-    # Check if recipe and user exist
-    recipe = session.get(Recipe, rating.recipe_id)
-    user = session.get(User, rating.user_id)
+    """Creates a new rating for a recipe."""
+    recipe = session.get(Recipe, rating.recipe_id) # Verify recipe exists
+    user = session.get(User, rating.user_id) # Verify user exists
     if not recipe or not user:
         raise HTTPException(status_code=404, detail="Recipe or User not found")
     if rating.value < 1 or rating.value > 5:
@@ -116,14 +127,17 @@ async def create_rating(rating: RatingCreate, session: Session = Depends(get_ses
 
 # Favorite Creation Endpoint
 class FavoriteCreate(SQLModel):
+    """Structure for creating a favorite recipe entry."""
     user_id: int
     recipe_id: int
 
 class FavoriteRead(Favorite):
+    """Response model for reading favorite data."""
     pass
 
 @app.post("/favorites/", response_model=FavoriteRead)
 async def create_favorite(favorite: FavoriteCreate, session: Session = Depends(get_session)):
+    """Adds a recipe to a user's favorites."""
     # Check if recipe and user exist
     recipe = session.get(Recipe, favorite.recipe_id)
     user = session.get(User, favorite.user_id)
