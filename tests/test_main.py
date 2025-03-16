@@ -159,7 +159,60 @@ def test_read_rating_2(client, test_db):
 
 def test_update_rating(client, test_db):
     """Test for update rating."""
-    pass
+    create_user(client)
+    token = login_user(client)
+    recipe_response = create_recipe(client, token)
+    recipe_id = recipe_response.json()["id"]
+    create_rating(client, recipe_id)
+    # Update rating from 3 to 1
+    rating_data = {
+        "recipe_id": recipe_id,
+        "user_id": 1,
+        "value": 1
+    }
+    response = client.put("/ratings/", json=rating_data)
+    logger.info(f"Update rating response: {response.text}")
+    assert response.status_code == 200
+    data = response.json()
+    assert data["recipe_id"] == recipe_id
+    assert data["user_id"] == 1
+    assert data["value"] == 1
+
+def test_update_rating_1(client, test_db):
+    """Test update with invalid rating."""
+    create_user(client)
+    token = login_user(client)
+    recipe_response = create_recipe(client, token)
+    recipe_id = recipe_response.json()["id"]
+    create_rating(client, recipe_id)
+    # Update rating from 3 to 10
+    rating_data = {
+        "recipe_id": recipe_id,
+        "user_id": 1,
+        "value": 10
+    }
+    response = client.put("/ratings/", json=rating_data)
+    logger.info(f"Update invalid rating response: {response.text}")
+    assert response.status_code == 400
+    assert response.json()["detail"] == "Rating must be between 1 and 3"
+
+def test_update_rating_2(client, test_db):
+    """Test update with rating but invalid user_id."""
+    create_user(client)
+    token = login_user(client)
+    recipe_response = create_recipe(client, token)
+    recipe_id = recipe_response.json()["id"]
+    create_rating(client, recipe_id)
+    # Update rating for non-existent user
+    rating_data = {
+        "recipe_id": recipe_id,
+        "user_id": 2,
+        "value": 3
+    }
+    response = client.put("/ratings/", json=rating_data)
+    logger.info(f"Update non-existent rating response: {response.text}")
+    assert response.status_code == 404
+    assert response.json()["detail"] == "Rating not found"
 
 def test_remove_rating(client, test_db):
     """Test for remove user rating."""
