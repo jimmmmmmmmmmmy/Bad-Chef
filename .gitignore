@@ -11,3 +11,5 @@ dist/
 build/
 *.sqlite3  # If you use SQLite locally
 .cache/    # Poetry cache
+# VS Code workspace files
+*.code-workspace
