@@ -137,6 +137,26 @@ async def read_rating(user_id: int, recipe_id: int, session: Session = Depends(g
         raise HTTPException(status_code=404, detail="Rating not found")
     return db_rating
 
+@app.put("/ratings/", response_model=RatingRead)
+async def update_rating(rating: RatingCreate, session: Session = Depends(get_session)):
+    """Update a user's rating for a recipe."""
+    db_rating = session.exec(
+        select(Rating).where(
+            Rating.user_id == rating.user_id,
+            Rating.recipe_id == rating.recipe_id
+        )
+    ).first()
+    if not db_rating:
+        raise HTTPException(status_code=404, detail="Rating not found")
+    if rating.value < 1 or rating.value > 3:
+        raise HTTPException(status_code=400, detail="Rating must be between 1 and 3")
+    db_rating.value = rating.value
+    session.add(db_rating)
+    session.commit()
+    session.refresh(db_rating)
+    logging.info(f"Updated rating: user_id={rating.user_id}, recipe_id={rating.recipe_id}, value={rating.value}")
+    return db_rating
+
 @app.delete("/ratings/", response_model=dict)
 async def remove_rating(rating: RatingCreate, session: Session = Depends(get_session)):
     db_rating = session.exec(
