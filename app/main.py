@@ -1,8 +1,9 @@
+from contextlib import asynccontextmanager
 from fastapi import FastAPI, Depends, HTTPException
 from sqlmodel import select, Session, SQLModel
 from app.models import User, Recipe, Rating, Favorite
 from app.auth import create_access_token, get_current_user, pwd_context
-from app.database import get_session, create_db_and_tables  # New import
+from app.database import get_session, create_db_and_tables, engine
 from pydantic import BaseModel
 from typing import Optional, List
 from datetime import datetime
@@ -11,12 +12,12 @@ import logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-app = FastAPI()
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    create_db_and_tables(engine)
+    yield
 
-# Create tables on app run
-@app.on_event("startup")
-def on_startup():
-    create_db_and_tables()
+app = FastAPI(lifespan=lifespan)
 
 # Login Endpoint
 class LoginRequest(BaseModel):
@@ -39,16 +40,21 @@ async def root():
 class UserCreate(SQLModel):
     username: str
     email: str
-    hashed_password: str
+    password: str
 
-@app.post("/users/", response_model=UserCreate)
+# User Response for test
+class UserResponse(SQLModel):
+    username: str
+    email: str
+    id: Optional[int] = None
+
+@app.post("/users/", response_model=UserResponse)
 async def create_user(user: UserCreate, session: Session = Depends(get_session)):
-    db_user = User(**user.dict())
-    db_user.hashed_password = pwd_context.hash(db_user.hashed_password) # Hash the password
+    db_user = User(username=user.username, email=user.email, hashed_password=pwd_context.hash(user.password))
     session.add(db_user)
     session.commit()
     session.refresh(db_user)
-    return db_user
+    return db_user  # Automatically maps to UserResponse
 
 # Recipe Recreation Endpoint
 class RecipeCreate(SQLModel):
@@ -67,7 +73,7 @@ class RecipeRead(Recipe):
 async def create_recipe(recipe: RecipeCreate, session: Session = Depends(get_session), current_user: User = Depends(get_current_user)):
     logger.info(f"Creating recipe for user: {current_user.username}, ID: {current_user.id}")
     try:
-        db_recipe = Recipe(**recipe.dict(), author_id=current_user.id)
+        db_recipe = Recipe(**recipe.model_dump(), author_id=current_user.id)
         session.add(db_recipe)
         session.commit()
         session.refresh(db_recipe)
@@ -91,7 +97,7 @@ class RatingCreate(SQLModel):
     value: int
 
 class RatingRead(Rating):
-    id: Optional[int] = None
+    pass
 
 @app.post("/ratings/", response_model=RatingRead)
 async def create_rating(rating: RatingCreate, session: Session = Depends(get_session)):
@@ -102,7 +108,7 @@ async def create_rating(rating: RatingCreate, session: Session = Depends(get_ses
         raise HTTPException(status_code=404, detail="Recipe or User not found")
     if rating.value < 1 or rating.value > 5:
         raise HTTPException(status_code=400, detail="Rating must be between 1 and 5")
-    db_rating = Rating(**rating.dict())
+    db_rating = Rating(**rating.model_dump())
     session.add(db_rating)
     session.commit()
     session.refresh(db_rating)
@@ -114,7 +120,7 @@ class FavoriteCreate(SQLModel):
     recipe_id: int
 
 class FavoriteRead(Favorite):
-    id: Optional[int] = None
+    pass
 
 @app.post("/favorites/", response_model=FavoriteRead)
 async def create_favorite(favorite: FavoriteCreate, session: Session = Depends(get_session)):
@@ -127,7 +133,7 @@ async def create_favorite(favorite: FavoriteCreate, session: Session = Depends(g
     existing = session.exec(select(Favorite).where(Favorite.user_id == favorite.user_id, Favorite.recipe_id == favorite.recipe_id)).first()
     if existing:
         raise HTTPException(status_code=400, detail="Already favorited")
-    db_favorite = Favorite(**favorite.dict())
+    db_favorite = Favorite(**favorite.model_dump())
     session.add(db_favorite)
     session.commit()
     session.refresh(db_favorite)
