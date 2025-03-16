@@ -1,15 +1,30 @@
+# Python bytecode and caches
 __pycache__/
 *.pyc
 *.pyo
 *.pyd
 .Python
-env/
-venv/
-.venv/
 *.egg-info/
 dist/
 build/
-*.sqlite3  # If you use SQLite locally
-.cache/    # Poetry cache
-# VS Code workspace files
+.cache/
+
+# Virtual environments
+env/
+venv/
+.venv/
+
+# Project-specific files
+*.sqlite3  # SQLite databases (e.g., recipes.db)
+.env       # Environment variables
+recipes.db # Explicitly exclude your DB file
+
+# macOS-specific
+.DS_Store
+
+# VS Code
+.vscode/
 *.code-workspace
+
+# Optional: Poetry lock file (uncomment if you want to exclude)
+# poetry.lock
