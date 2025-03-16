@@ -128,6 +128,39 @@ def test_create_rating_2(client, test_db):
     assert response.status_code == 400
     assert response.json()["detail"] == "Rating must be between 1 and 3"
 
+def test_read_reating(client, test_db):
+    """Test reading/retrieving a rating for a recipe."""
+    create_user(client)
+    token = login_user(client)
+    recipe_response = create_recipe(client, token)
+    recipe_id = recipe_response.json()["id"]
+    create_rating(client, recipe_id)
+
+    response = client.get(f"/ratings/?user_id=1&recipe_id={recipe_id}")
+    logger.info(f"Read rating response: {response.text}")
+    assert response.status_code == 200
+    data = response.json()
+    assert data["user_id"] == 1
+    assert data["recipe_id"] == recipe_id
+    assert data["value"] == 3
+
+def test_read_rating_2(client, test_db):
+    """Test retrieving a non-existent rating."""
+    create_user(client)
+    token = login_user(client)
+    recipe_response = create_recipe(client, token)
+    recipe_id = recipe_response.json()["id"]
+    create_rating(client, recipe_id)
+    # Get a rating from valid recipe / invalid user id
+    response = client.get(f"/ratings/?user_id=2&recipe_id={recipe_id}")
+    logger.info(f"Read non-existent rating response: {response.text}")
+    assert response.status_code == 404
+    assert response.json()["detail"] == "Rating not found"
+
+def test_update_rating(client, test_db):
+    """Test for update rating."""
+    pass
+
 def test_remove_rating(client, test_db):
     """Test for remove user rating."""
     create_user(client)
