@@ -6,6 +6,10 @@ from app.database import get_session, create_db_and_tables  # New import
 from pydantic import BaseModel
 from typing import Optional, List
 from datetime import datetime
+import logging
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 app = FastAPI()
 
@@ -53,20 +57,26 @@ class RecipeCreate(SQLModel):
     description: str
     ingredients: str
     instructions: str
-    author_id: int
+    # Removed author_id as we're passing it in the post
 
 class RecipeRead(Recipe):
     """Response model including auto-generated fields for id & created_at"""
     pass
 
 @app.post("/recipes/", response_model=RecipeRead)
-async def create_recipe(recipe: RecipeCreate, session: Session = Depends(get_session), current_user: User  = Depends(get_current_user)):
-    db_recipe = Recipe(**recipe.dict(), author_id=current_user.id)
-    session.add(db_recipe)
-    session.commit()
-    session.refresh(db_recipe)
-    return db_recipe
-
+async def create_recipe(recipe: RecipeCreate, session: Session = Depends(get_session), current_user: User = Depends(get_current_user)):
+    logger.info(f"Creating recipe for user: {current_user.username}, ID: {current_user.id}")
+    try:
+        db_recipe = Recipe(**recipe.dict(), author_id=current_user.id)
+        session.add(db_recipe)
+        session.commit()
+        session.refresh(db_recipe)
+        logger.info(f"Recipe created: {db_recipe.id}")
+        return db_recipe
+    except Exception as e:
+        logger.error(f"Error creating recipe: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Failed to create recipe: {str(e)}")
+    
 # Recipe Browsing Endpoint
 @app.get("/recipes/", response_model=List[RecipeRead])
 async def get_recipes(session: Session = Depends(get_session)):
@@ -116,7 +126,7 @@ async def create_favorite(favorite: FavoriteCreate, session: Session = Depends(g
     # Check if already favorited
     existing = session.exec(select(Favorite).where(Favorite.user_id == favorite.user_id, Favorite.recipe_id == favorite.recipe_id)).first()
     if existing:
-        raise HTTPException(staus_code=400, detail="Already favorited")
+        raise HTTPException(status_code=400, detail="Already favorited")
     db_favorite = Favorite(**favorite.dict())
     session.add(db_favorite)
     session.commit()
