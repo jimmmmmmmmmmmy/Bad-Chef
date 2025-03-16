@@ -37,3 +37,13 @@ def create_recipe(client, token, title="Test Recipe", description="test", ingred
     response = client.post("/recipes/", json=recipe_data, headers=headers)
     logger.info(f"Created recipe {title}: {response.text}")
     return response
+
+def create_rating(client, recipe_id, user_id=1, value=3):
+    rating_data = {
+        "recipe_id": recipe_id,
+        "user_id": user_id,
+        "value": value
+    }
+    response = client.post("/ratings/", json=rating_data)
+    logger.info(f"Created rating for recipe {recipe_id}: {response.text}")
+    return response

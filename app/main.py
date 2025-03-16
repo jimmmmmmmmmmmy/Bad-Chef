@@ -124,6 +124,21 @@ async def create_rating(rating: RatingCreate, session: Session = Depends(get_ses
     session.refresh(db_rating)
     return db_rating
 
+@app.delete("/ratings/", response_model=dict)
+async def remove_rating(rating: RatingCreate, session: Session = Depends(get_session)):
+    db_rating = session.exec(
+        select(Rating).where(
+            Rating.user_id == rating.user_id,
+            Rating.recipe_id == rating.recipe_id
+        )
+    ).first()
+    if not db_rating:
+        raise HTTPException(status_code=404, detail="Rating not found")
+    session.delete(db_rating)
+    session.commit()
+    logger.info(f"Removed rating: user_id={rating.user_id}, recipe_id={rating.recipe_id}")
+    return {"message": f"Rating (user_id={rating.user_id}, recipe_id={rating.recipe_id}) removed successfully"}
+
 # Favorite Creation Endpoint
 class FavoriteCreate(SQLModel):
     """Structure for creating a favorite recipe entry."""

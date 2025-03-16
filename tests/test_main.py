@@ -1,7 +1,7 @@
 from app.models import User
 from app.auth import pwd_context
 from sqlmodel import select
-from tests.test_utils import create_user, login_user, create_recipe
+from tests.test_utils import create_user, login_user, create_recipe, create_rating
 import logging
 
 logging.basicConfig(level=logging.INFO)
@@ -98,6 +98,9 @@ def test_get_recipes_3(client, test_db):
     assert data[0]["author_id"] == 1
     assert data[1]["title"] == "Test Recipe 2"
     assert data[1]["author_id"] == 2
+
+def test_remove_recipe(client, test_db):
+    pass
     
 def test_create_rating(client, test_db):
     """Test for valid rating."""
@@ -105,13 +108,7 @@ def test_create_rating(client, test_db):
     token = login_user(client)
     recipe_response = create_recipe(client, token)
     recipe_id = recipe_response.json()["id"]
-
-    rating_data = {
-        "recipe_id": recipe_id,
-        "user_id": 1,
-        "value": 3
-    }
-    response = client.post("/ratings/", json=rating_data)
+    response = create_rating(client, recipe_id)
     logger.info(f"Rating response: {response.text}")
     assert response.status_code == 200
     data = response.json()
@@ -126,16 +123,24 @@ def test_create_rating_2(client, test_db):
     token = login_user(client)
     recipe_response = create_recipe(client, token)
     recipe_id = recipe_response.json()["id"]
-    # Invalid rating of 4
-    rating_data = {
-        "recipe_id": recipe_id,
-        "user_id": 1,
-        "value": 4
-    }
-    response = client.post("/ratings/", json=rating_data)
+    response = client.post("/ratings/", json={"recipe_id": recipe_id, "user_id": 1, "value": 6})
     logger.info(f"Invalid response: {response.text}")
     assert response.status_code == 400
     assert response.json()["detail"] == "Rating must be between 1 and 3"
+
+def test_remove_rating(client, test_db):
+    """Test for remove user rating."""
+    create_user(client)
+    token = login_user(client)
+    recipe_response = create_recipe(client, token)
+    recipe_id = recipe_response.json()["id"]
+    create_rating(client, recipe_id)
+    # Delete the recent user data
+    rating_data = {"recipe_id": recipe_id, "user_id": 1, "value": 3}
+    response = client.request('DELETE', '/ratings/', json=rating_data)
+    assert response.status_code == 200
+    data = response.json()
+    assert data["message"] == f"Rating (user_id=1, recipe_id={recipe_id}) removed successfully"
 
 def test_create_favorite(client, test_db):
     """Test adding a recipe to favorites."""
