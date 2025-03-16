@@ -1,27 +1,31 @@
 from fastapi import FastAPI, Depends, HTTPException
-from sqlmodel import SQLModel, create_engine, Session, select
+from sqlmodel import select, Session, SQLModel
 from app.models import User, Recipe, Rating, Favorite
+from app.auth import create_access_token, get_current_user, pwd_context
+from app.database import get_session, create_db_and_tables  # New import
+from pydantic import BaseModel
 from typing import Optional, List
 from datetime import datetime
 
 app = FastAPI()
 
-# using SQLite for now, echo=True for debugging
-DATABASE_URL = "sqlite:///recipes.db"
-engine = create_engine(DATABASE_URL, echo=True)
-
-def create_db_and_tables():
-    SQLModel.metadata.create_all(engine)
-
-# Dependency to get a database session
-def get_session():
-    with Session(engine) as session:
-        yield session
-
 # Create tables on app run
 @app.on_event("startup")
 def on_startup():
     create_db_and_tables()
+
+# Login Endpoint
+class LoginRequest(BaseModel):
+    username: str
+    password: str
+
+@app.post("/token")
+async def login(request: LoginRequest, session: Session = Depends(get_session)):
+    user = session.exec(select(User).where(User.username == request.username)).first()
+    if not user or not pwd_context.verify(request.password, user.hashed_password):
+        raise HTTPException(status_code=401, detail="Invalid credentials")
+    token = create_access_token({"sub": user.username})
+    return {"access_token": token, "token_type": "bearer"}
 
 @app.get("/")
 async def root():
@@ -36,6 +40,7 @@ class UserCreate(SQLModel):
 @app.post("/users/", response_model=UserCreate)
 async def create_user(user: UserCreate, session: Session = Depends(get_session)):
     db_user = User(**user.dict())
+    db_user.hashed_password = pwd_context.hash(db_user.hashed_password) # Hash the password
     session.add(db_user)
     session.commit()
     session.refresh(db_user)
@@ -52,12 +57,11 @@ class RecipeCreate(SQLModel):
 
 class RecipeRead(Recipe):
     """Response model including auto-generated fields for id & created_at"""
-    id: Optional[int] = None
-    created_at: Optional[datetime] = None
+    pass
 
 @app.post("/recipes/", response_model=RecipeRead)
-async def create_recipe(recipe: RecipeCreate, session: Session = Depends(get_session)):
-    db_recipe = Recipe(**recipe.dict())
+async def create_recipe(recipe: RecipeCreate, session: Session = Depends(get_session), current_user: User  = Depends(get_current_user)):
+    db_recipe = Recipe(**recipe.dict(), author_id=current_user.id)
     session.add(db_recipe)
     session.commit()
     session.refresh(db_recipe)
