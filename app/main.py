@@ -1,10 +1,10 @@
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from app.database import create_db_and_tables, engine
-from app.users import router as users_router
-from app.ratings import router as ratings_router
-from app.recipes import router as recipes_router
-from app.favorites import router as favorites_router
+from app.routers.users import router as users_router
+from app.routers.ratings import router as ratings_router
+from app.routers.recipes import router as recipes_router
+from app.routers.favorites import router as favorites_router
 import logging
 
 logging.basicConfig(level=logging.INFO)
