@@ -35,6 +35,14 @@ async def get_recipes(session: Session = Depends(get_session)):
     recipes = session.exec(statement).all()
     return recipes # Return as list for RecipeRead format
 
+# Get a specific recipe
+@router.get("/{id}", response_model=RecipeRead)
+async def get_recipe(id: int, session: Session = Depends(get_session)):
+    recipe = session.get(Recipe,id)
+    if not recipe:
+        raise HTTPException(status_code=404, detail="Recipe not found")
+    return recipe
+
 @router.put("/recipes/{id}", response_model=RecipeRead)
 async def update_recipe(id: int, recipe: RecipeCreate, session: Session = Depends(get_session)):
     """Update a recipe."""

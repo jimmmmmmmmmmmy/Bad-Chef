@@ -99,6 +99,22 @@ def test_get_recipes_3(client, test_db):
     assert data[1]["title"] == "Test Recipe 2"
     assert data[1]["author_id"] == 2
 
+def test_get_specific_recipe(client, test_db):
+    """Get a recipe, specifically."""
+    create_user(client)
+    token = login_user(client)
+    recipe_response = create_recipe(client, token)
+    recipe_id = recipe_response.json()["id"]
+    # Fetch create recipe
+    response = client.get(f"/recipes/{recipe_id}")
+    assert response.status_code == 200
+    data = response.json()
+    assert data["id"] == recipe_id
+    assert data["title"] == "Test Recipe"
+    assert data["description"] == "test"
+    assert data["ingredients"] == "Stuff"
+    assert data["instructions"] == "Cook"
+
 def test_remove_recipe(client, test_db):
     """Not implemented for now."""
     pass
