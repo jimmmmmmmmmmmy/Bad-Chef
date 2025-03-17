@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException
-from sqlmodel import Session, select
-from app.models import User, Recipe, RecipeRead, RecipeCreate
+from sqlmodel import Session, select, func
+from app.models import User, Rating, Recipe, RecipeRead, RecipeCreate
 from app.database import get_session
 from app.auth import get_current_user
 from typing import List
@@ -53,3 +53,19 @@ async def delete_recipe(id: int, session: Session = Depends(get_session), curren
     """Delete a recipe from database."""
     pass
     
+@router.get("/{id}/average-rating", response_model=dict)
+async def get_average_rating(id: int, session: Session = Depends(get_session)):
+    """Get the average rating for a specific recipe."""
+    # Check if recipe exists
+    recipe = session.get(Recipe, id)
+    if not recipe:
+        raise HTTPException(status_code=404, detail="Recipe not found")
+    
+    avg_rating = session.exec(
+        select(func.avg(Rating.value)).where(Rating.recipe_id == id)
+    ).first()
+
+    if avg_rating is None:
+        return {"average_rating": 0.0}
+    
+    return {"average_rating": round(float(avg_rating), 1)}

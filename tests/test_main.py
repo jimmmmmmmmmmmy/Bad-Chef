@@ -118,6 +118,29 @@ def test_get_specific_recipe(client, test_db):
 def test_remove_recipe(client, test_db):
     """Not implemented for now."""
     pass
+
+def test_get_average_rating(client, test_db):
+    """Test getting the average rating for a recipe."""
+    # Create user 1 and a recipe
+    create_user(client, "user1", "user1@example.com")
+    token1 = login_user(client, "user1")
+    recipe_response = create_recipe(client, token1)
+    recipe_id = recipe_response.json()["id"]
+
+    # User 1 rates the recipe (value=3)
+    create_rating(client, recipe_id, token1, value=3)
+
+    # Create user 2 and rate the same recipe (value=2)
+    create_user(client, "user2", "user2@example.com")
+    token2 = login_user(client, "user2")
+    create_rating(client, recipe_id, token2, value=2)
+
+    # Get average rating
+    response = client.get(f"/recipes/{recipe_id}/average-rating")
+    logger.info(f"Average rating response: {response.text}")
+    assert response.status_code == 200
+    data = response.json()
+    assert data["average_rating"] == 2.5
     
 def test_create_rating(client, test_db):
     """Test for valid rating."""
@@ -252,16 +275,14 @@ def test_create_favorite(client, test_db):
     recipe_id = recipe_response.json()["id"]
     # Add recipe_id to user favorites
     favorite_data = {
-        "user_id": 1,
         "recipe_id": recipe_id
     }
-    response = client.post("/favorites/", json=favorite_data)
+    response = client.post("/favorites/", json=favorite_data, headers={"Authorization": f"Bearer {token}"})
     logger.info(f"Favorite response: {response.text}")
     assert response.status_code == 200
     data = response.json()
-    assert data["user_id"] == 1
     assert data["recipe_id"] == recipe_id
-    assert "id" in data
+    assert data["user_id"] == 1
 
 def test_read_favorite(client, test_db):
     """Test reading/retrieving a favorite."""
@@ -275,7 +296,7 @@ def test_read_favorite(client, test_db):
         "recipe_id": recipe_id
     }
     client.post("/favorites/", json=favorite_data)
-    response = client.get(f"/favorites/?user_id=1&recipe_id={recipe_id}")
+    response = client.get(f"/favorites/?user_id=1&recipe_id={recipe_id}", headers={"Authorization": f"Bearer {token}"})
     logger.info(f"Read rating response: {response.text}")
     assert response.status_code == 200
     data = response.json()
