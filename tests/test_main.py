@@ -34,7 +34,7 @@ def test_good_login_user(client, test_db):
 def test_bad_login_1(client, test_db):
     """Test for login with valid username, bad password."""
     create_user(client)
-    response = client.post("/token", json={"username": "testuser", "password": "password"})
+    response = client.post("/users/token", json={"username": "testuser", "password": "password"})
     logger.info(f"Bad password response: {response.text}")
     assert response.status_code == 401
     assert response.json()["detail"] == "Invalid credentials"
@@ -42,7 +42,7 @@ def test_bad_login_1(client, test_db):
 def test_bad_login_2(client, test_db):
     """Test for login with invalid username."""
     create_user(client)
-    response = client.post("/token", json={"username": "testuser123", "password": "password123"})
+    response = client.post("/users/token", json={"username": "testuser123", "password": "password123"})
     logger.info(f"Bad username response: {response.text}")
     assert response.status_code == 401
     assert response.json()["detail"] == "Invalid credentials"
@@ -100,6 +100,7 @@ def test_get_recipes_3(client, test_db):
     assert data[1]["author_id"] == 2
 
 def test_remove_recipe(client, test_db):
+    """Not implemented for now."""
     pass
     
 def test_create_rating(client, test_db):

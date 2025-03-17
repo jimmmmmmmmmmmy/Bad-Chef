@@ -20,7 +20,7 @@ def login_user(client, username="testuser", password="password123"):
         "username": username,
         "password": password
     }
-    response = client.post("/token", json=login_data)
+    response = client.post("/users/token", json=login_data)
     logger.info(f"Login for {username}: {response.text}")
     assert response.status_code == 200, f"Login failed: {response.text}"
     return response.json()["access_token"]

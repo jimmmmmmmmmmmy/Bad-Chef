@@ -1,4 +1,3 @@
-# tests/conftest.py
 import sys
 import os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
@@ -6,7 +5,8 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 import pytest
 from fastapi.testclient import TestClient
 from sqlmodel import SQLModel, create_engine, Session
-from app.main import app as fastapi_app, get_session
+from app.main import app as fastapi_app
+from app.database import get_session
 
 @pytest.fixture(scope="function")
 def test_engine():
