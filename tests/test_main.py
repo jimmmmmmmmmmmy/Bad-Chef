@@ -292,16 +292,15 @@ def test_read_favorite(client, test_db):
     recipe_id = recipe_response.json()["id"]
     # Add recipe_id to user favorites
     favorite_data = {
-        "user_id": 1,
         "recipe_id": recipe_id
     }
-    client.post("/favorites/", json=favorite_data)
-    response = client.get(f"/favorites/?user_id=1&recipe_id={recipe_id}", headers={"Authorization": f"Bearer {token}"})
+    client.post("/favorites/", json=favorite_data, headers={"Authorization": f"Bearer {token}"})
+    response = client.get(f"/favorites/?recipe_id={recipe_id}", headers={"Authorization": f"Bearer {token}"})
     logger.info(f"Read rating response: {response.text}")
     assert response.status_code == 200
     data = response.json()
-    assert data["user_id"] == 1
     assert data["recipe_id"] == recipe_id
+    assert data["user_id"] == 1
 
 def test_read_favorite_2(client, test_db):
     """Test retrieving a non-existent user but valid recipe."""
@@ -315,7 +314,7 @@ def test_read_favorite_2(client, test_db):
         "recipe_id": recipe_id
     }
     client.post("/favorites/", json=favorite_data)
-    response = client.get(f"/favorites/?user_id=2&recipe_id={recipe_id}")
+    response = client.get(f"/favorites/?recipe_id={recipe_id}", headers={"Authorization": f"Bearer {token}"})
     logger.info(f"Read rating response: {response.text}")
     assert response.status_code == 404
     assert response.json()["detail"] == "Favorite not found"
@@ -328,9 +327,9 @@ def test_duplicate_favorite(client, test_db):
     recipe_id = recipe_response.json()["id"]
     # Added favorite the first time
     favorite_data = {"user_id": 1, "recipe_id": recipe_id}
-    response = client.post("/favorites/", json=favorite_data)
+    response = client.post("/favorites/", json=favorite_data, headers={"Authorization": f"Bearer {token}"})
     # Test duplicate favorite
-    response = client.post("/favorites/", json=favorite_data)
+    response = client.post("/favorites/", json=favorite_data, headers={"Authorization": f"Bearer {token}"})
     logger.info(f"Duplicate favorite response: {response.text}")
     assert response.status_code == 400
     assert response.json()["detail"] == "Already favorited"
@@ -342,12 +341,11 @@ def test_remove_favorite(client, test_db):
     recipe_response = create_recipe(client, token)
     recipe_id = recipe_response.json()["id"]
     favorite_data = {
-        "user_id": 1,
         "recipe_id": recipe_id
     }
-    client.post("/favorites/", json=favorite_data)
+    client.post("/favorites/", json=favorite_data, headers={"Authorization": f"Bearer {token}"})
     # client.request with a 'DELETE' in there, as there's no client.delete()
-    response = client.request('DELETE', '/favorites/', json=favorite_data)
+    response = client.request('DELETE', '/favorites/', json=favorite_data, headers={"Authorization": f"Bearer {token}"})
     logger.info(f"Remove favorite response: {response.text}")
     assert response.status_code == 200
     data = response.json()

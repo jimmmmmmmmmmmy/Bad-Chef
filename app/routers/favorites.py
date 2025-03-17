@@ -34,7 +34,7 @@ async def create_favorite(favorite: FavoriteCreate, session: Session = Depends(g
     return db_favorite
 
 @router.get("/", response_model=FavoriteRead)
-async def read_favorite(user_id: int, recipe_id: int, session: Session = Depends(get_session), current_user: User = Depends(get_current_user)):
+async def read_favorite(recipe_id: int, session: Session = Depends(get_session), current_user: User = Depends(get_current_user)):
     """Retrieve a user's rating for a recipe."""
     db_favorite = session.exec(
         select(Favorite).where(
