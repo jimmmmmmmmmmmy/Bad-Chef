@@ -1,45 +1,83 @@
-// frontend/src/App.tsx
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import axios from "axios";
-import { Recipe } from "./types";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import "./App.css";
 
-function App() {
-  const [recipes, setRecipes] = useState<Recipe[]>([]);
-  const [loading, setLoading] = useState(true);
+function LoginSignup() {
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [isSignup, setIsSignup] = useState(false); // Toggle between signup/login
   const [error, setError] = useState<string | null>(null);
+  const navigate = useNavigate();
 
-  useEffect(() => {
-    const fetchRecipes = async () => {
-      try {
-        const response = await axios.get("http://localhost:8000/recipes/");
-        setRecipes(response.data);
-      } catch (err) {
-        setError("Failed to fetch recipes");
-        console.error(err);
-      } finally {
-        setLoading(false);
+  const handleSubmit = async () => {
+    setError(null);
+    try {
+      if (isSignup) {
+        // Signup
+        await axios.post("http://localhost:8000/users/", {
+          username,
+          email,
+          password,
+        });
+        // Auto-login after signup
+        const loginResponse = await axios.post("http://localhost:8000/users/token", {
+          username,
+          password,
+        });
+        const token = loginResponse.data.access_token;
+        localStorage.setItem("token", token);
+        axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+        navigate("/recipes");
+      } else {
+        // Login
+        const response = await axios.post("http://localhost:8000/users/token", {
+          username,
+          password,
+        });
+        const token = response.data.access_token;
+        localStorage.setItem("token", token);
+        axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+        navigate("/recipes");
       }
-    };
-    fetchRecipes();
-  }, []);
-
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div>{error}</div>;
+    } catch (err) {
+      setError(isSignup ? "Signup failed" : "Login failed");
+      console.error(err);
+    }
+  };
 
   return (
     <div className="App">
-      <h1>Recipe Platform</h1>
-      <ul>
-        {recipes.map((recipe) => (
-          <li key={recipe.id}>
-            <Link to={`/recipe/${recipe.id}`}>{recipe.title}</Link>
-          </li>
-        ))}
-      </ul>
+      <h1>{isSignup ? "Sign Up" : "Log In"}</h1>
+      {error && <p style={{ color: "red" }}>{error}</p>}
+      <input
+        value={username}
+        onChange={(e) => setUsername(e.target.value)}
+        placeholder="Username"
+      />
+      {isSignup && (
+        <input
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          placeholder="Email"
+        />
+      )}
+      <input
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+        type="password"
+        placeholder="Password"
+      />
+      <button onClick={handleSubmit}>{isSignup ? "Sign Up" : "Log In"}</button>
+      <p>
+        {isSignup ? "Already have an account?" : "Need an account?"}{" "}
+        <button onClick={() => setIsSignup(!isSignup)}>
+          {isSignup ? "Log In" : "Sign Up"}
+        </button>
+      </p>
     </div>
   );
 }
 
-export default App;
+export default LoginSignup;
