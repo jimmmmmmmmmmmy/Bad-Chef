@@ -41,9 +41,23 @@ function LoginSignup() {
         axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
         navigate("/recipes");
       }
-    } catch (err) {
-      setError(isSignup ? "Signup failed" : "Login failed");
-      console.error(err);
+    } catch (err: any) {
+      console.log("Raw error:", err); // Full error object
+      if (err.response) {
+        console.log("Response status:", err.response.status);
+        console.log("Response data:", err.response.data);
+        const status = err.response.status;
+        const detail = err.response.data?.detail || "An error occurred";
+        if (status === 400) {
+          setError(`Bad request: ${detail}`);
+        } else if (status === 401) {
+          setError(`Unauthorized: ${detail}`);
+        } else {
+          setError(`Login failed: ${detail}`);
+        }
+      } else {
+        setError("Login failed - network error or server unreachable");
+      }
     }
   };
 
