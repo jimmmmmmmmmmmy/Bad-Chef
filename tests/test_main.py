@@ -47,6 +47,14 @@ def test_bad_login_2(client, test_db):
     assert response.status_code == 401
     assert response.json()["detail"] == "Invalid credentials"
 
+def test_bad_login_3(client, test_db):
+    """Test for login with invalid username."""
+    create_user(client)
+    response = client.post("/users/token", json={"username": "", "password": ""})
+    logger.info(f"Bad username response: {response.text}")
+    assert response.status_code == 400
+    assert response.json()["detail"] == "Username and password are required"
+
 def test_create_recipe(client, test_db):
     """Test for creating recipe"""
     create_user(client)

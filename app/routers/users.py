@@ -15,6 +15,9 @@ class LoginRequest(BaseModel):
 @router.post("/token")
 async def login(request: LoginRequest, session: Session = Depends(get_session)):
     """Handles user login and returns access token."""
+    # No username or password
+    if not request.username or not request.password:
+        raise HTTPException(status_code=400, detail="Username and password are required")
     user = session.exec(select(User).where(User.username == request.username)).first()
     if not user or not pwd_context.verify(request.password, user.hashed_password):
         raise HTTPException(status_code=401, detail="Invalid credentials")
