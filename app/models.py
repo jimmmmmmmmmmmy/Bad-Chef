@@ -52,7 +52,6 @@ class Rating(SQLModel, table=True):
 class RatingCreate(SQLModel):
     """Structure for creating a recipe rating."""
     recipe_id: int
-    user_id: int
     value: int
 
 class RatingRead(Rating):

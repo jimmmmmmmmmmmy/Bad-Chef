@@ -125,7 +125,7 @@ def test_create_rating(client, test_db):
     token = login_user(client)
     recipe_response = create_recipe(client, token)
     recipe_id = recipe_response.json()["id"]
-    response = create_rating(client, recipe_id)
+    response = create_rating(client, recipe_id, token)
     logger.info(f"Rating response: {response.text}")
     assert response.status_code == 200
     data = response.json()
@@ -140,7 +140,7 @@ def test_create_rating_2(client, test_db):
     token = login_user(client)
     recipe_response = create_recipe(client, token)
     recipe_id = recipe_response.json()["id"]
-    response = client.post("/ratings/", json={"recipe_id": recipe_id, "user_id": 1, "value": 6})
+    response = client.post("/ratings/", json={"recipe_id": recipe_id, "user_id": 1, "value": 6}, headers={"Authorization": f"Bearer {token}"})
     logger.info(f"Invalid response: {response.text}")
     assert response.status_code == 400
     assert response.json()["detail"] == "Rating must be between 1 and 3"
@@ -151,9 +151,9 @@ def test_read_reating(client, test_db):
     token = login_user(client)
     recipe_response = create_recipe(client, token)
     recipe_id = recipe_response.json()["id"]
-    create_rating(client, recipe_id)
+    create_rating(client, recipe_id, token)
 
-    response = client.get(f"/ratings/?user_id=1&recipe_id={recipe_id}")
+    response = client.get(f"/ratings/?user_id=1&recipe_id={recipe_id}", headers={"Authorization": f"Bearer {token}"})
     logger.info(f"Read rating response: {response.text}")
     assert response.status_code == 200
     data = response.json()
@@ -162,17 +162,17 @@ def test_read_reating(client, test_db):
     assert data["value"] == 3
 
 def test_read_rating_2(client, test_db):
-    """Test retrieving a non-existent rating."""
+    """Test non-authenticated rating retrieval."""
     create_user(client)
     token = login_user(client)
     recipe_response = create_recipe(client, token)
     recipe_id = recipe_response.json()["id"]
-    create_rating(client, recipe_id)
+    create_rating(client, recipe_id, token)
     # Get a rating from valid recipe / invalid user id
-    response = client.get(f"/ratings/?user_id=2&recipe_id={recipe_id}")
+    response = client.get(f"/ratings/?user_id=2&recipe_id={recipe_id}", )
     logger.info(f"Read non-existent rating response: {response.text}")
-    assert response.status_code == 404
-    assert response.json()["detail"] == "Rating not found"
+    assert response.status_code == 403
+    assert response.json()["detail"] == "Not authenticated"
 
 def test_update_rating(client, test_db):
     """Test for update rating."""
@@ -180,19 +180,17 @@ def test_update_rating(client, test_db):
     token = login_user(client)
     recipe_response = create_recipe(client, token)
     recipe_id = recipe_response.json()["id"]
-    create_rating(client, recipe_id)
+    create_rating(client, recipe_id, token)
     # Update rating from 3 to 1
     rating_data = {
         "recipe_id": recipe_id,
-        "user_id": 1,
         "value": 1
     }
-    response = client.put("/ratings/", json=rating_data)
+    response = client.put("/ratings/", json=rating_data, headers={"Authorization": f"Bearer {token}"})
     logger.info(f"Update rating response: {response.text}")
     assert response.status_code == 200
     data = response.json()
     assert data["recipe_id"] == recipe_id
-    assert data["user_id"] == 1
     assert data["value"] == 1
 
 def test_update_rating_1(client, test_db):
@@ -201,32 +199,33 @@ def test_update_rating_1(client, test_db):
     token = login_user(client)
     recipe_response = create_recipe(client, token)
     recipe_id = recipe_response.json()["id"]
-    create_rating(client, recipe_id)
+    create_rating(client, recipe_id, token)
     # Update rating from 3 to 10
     rating_data = {
         "recipe_id": recipe_id,
-        "user_id": 1,
         "value": 10
     }
-    response = client.put("/ratings/", json=rating_data)
+    response = client.put("/ratings/", json=rating_data, headers={"Authorization": f"Bearer {token}"})
     logger.info(f"Update invalid rating response: {response.text}")
     assert response.status_code == 400
     assert response.json()["detail"] == "Rating must be between 1 and 3"
 
 def test_update_rating_2(client, test_db):
-    """Test update with rating but invalid user_id."""
+    """Test updating a rating that doesn’t exist for the authenticated user."""
     create_user(client)
     token = login_user(client)
     recipe_response = create_recipe(client, token)
     recipe_id = recipe_response.json()["id"]
-    create_rating(client, recipe_id)
-    # Update rating for non-existent user
+    create_rating(client, recipe_id, token)
+
+    create_user(client, "user2", "user2@example.com")
+    token2 = login_user(client, "user2")
+    # Update rating using 2nd users credentials
     rating_data = {
         "recipe_id": recipe_id,
-        "user_id": 2,
         "value": 3
     }
-    response = client.put("/ratings/", json=rating_data)
+    response = client.put("/ratings/", json=rating_data, headers={"Authorization": f"Bearer {token2}"})
     logger.info(f"Update non-existent rating response: {response.text}")
     assert response.status_code == 404
     assert response.json()["detail"] == "Rating not found"
@@ -237,10 +236,10 @@ def test_remove_rating(client, test_db):
     token = login_user(client)
     recipe_response = create_recipe(client, token)
     recipe_id = recipe_response.json()["id"]
-    create_rating(client, recipe_id)
+    create_rating(client, recipe_id, token)
     # Delete the recent user data
-    rating_data = {"recipe_id": recipe_id, "user_id": 1, "value": 3}
-    response = client.request('DELETE', '/ratings/', json=rating_data)
+    rating_data = {"recipe_id": recipe_id, "value": 3}
+    response = client.request('DELETE', '/ratings/', json=rating_data, headers={"Authorization": f"Bearer {token}"})
     assert response.status_code == 200
     data = response.json()
     assert data["message"] == f"Rating (user_id=1, recipe_id={recipe_id}) removed successfully"

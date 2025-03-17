@@ -44,12 +44,12 @@ async def get_recipe(id: int, session: Session = Depends(get_session)):
     return recipe
 
 @router.put("/recipes/{id}", response_model=RecipeRead)
-async def update_recipe(id: int, recipe: RecipeCreate, session: Session = Depends(get_session)):
+async def update_recipe(id: int, recipe: RecipeCreate, session: Session = Depends(get_session), current_user: User = Depends(get_current_user)):
     """Update a recipe."""
     pass
 
 @router.delete("/recipes/{id}", response_model=dict)
-async def delete_recipe(id: int, session: Session = Depends(get_session)):
+async def delete_recipe(id: int, session: Session = Depends(get_session), current_user: User = Depends(get_current_user)):
     """Delete a recipe from database."""
     pass
     
