@@ -1,4 +1,3 @@
-// frontend/src/RecipeDetail.tsx
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
@@ -35,7 +34,6 @@ function RecipeDetail() {
       <p><strong>Description:</strong> {recipe.description}</p>
       <p><strong>Ingredients:</strong> {recipe.ingredients}</p>
       <p><strong>Instructions:</strong> {recipe.instructions}</p>
-      <p><strong>Author ID:</strong> {recipe.author_id}</p>
       <p><strong>Created At:</strong> {new Date(recipe.created_at).toLocaleString()}</p>
     </div>
   );

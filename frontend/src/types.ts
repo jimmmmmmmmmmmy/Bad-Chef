@@ -1,4 +1,3 @@
-// frontend/src/types.ts
 export interface Recipe {
     id: number;
     title: string;
@@ -7,4 +6,6 @@ export interface Recipe {
     instructions: string;
     author_id: number;
     created_at: string;
+    imageSource?: string; 
+    author?: string;
   }

@@ -1,0 +1,126 @@
+html, body {
+    background-color: #fff;
+    margin: 0;
+    padding: 0;
+    height: 100%;
+  }
+  
+  .recipes-container {
+    margin-left: auto;
+    margin-right: auto;
+    flex: 1;
+    background-color: #fff;
+    min-height: 100vh; /* Ensure it fills the viewport height */
+    padding-bottom: 60px; /* Space for the fixed logout button */
+    max-width: 600px; /* Constrain width for centering */
+    width: 100%; /* Ensure it doesn't exceed max-width */
+    display: flex; /* Use flex to control child alignment */
+    flex-direction: column; /* Stack children vertically */
+    align-items: center; /* Center children horizontally */
+    justify-content: flex-start; /* Align content to the top */
+  }
+  
+  /* Ensure child containers respect the centered layout */
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    width: 100%; /* Ensure header spans the container width */
+  }
+  
+  .icon {
+    width: 24px;
+    height: 24px;
+    opacity: 0.5;
+    cursor: pointer;
+  }
+  
+  .title {
+    font-size: 24px;
+    font-weight: bold;
+    text-align: center;
+    flex: 1;
+  }
+  
+  .search-container {
+    display: flex;
+    align-items: center;
+    padding: 0 20px;
+    margin-bottom: 5px;
+    width: 100%; /* Ensure search bar spans the container width */
+  }
+  
+  .search-field-wrapper {
+    width: 85%;
+  }
+  
+  .filter-button {
+    padding: 10px;
+    margin-left: 10px;
+    background: none;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .filter-icon {
+    width: 25px;
+    height: 27px;
+  }
+  
+  .content-container {
+    flex: 1;
+    padding: 0;
+    width: 100%; /* Ensure content spans the container width */
+  }
+  
+  .source-text {
+    font-size: 24px;
+    font-weight: 600;
+    color: #333;
+    text-align: left;
+    padding: 0 20px;
+    margin-bottom: 0;
+  }
+  
+  .recipe-list-wrapper {
+    flex: 1;
+    position: relative;
+    width: 100%; /* Ensure recipe list spans the container width */
+  }
+  
+  .faded-edge {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 20px;
+    background: linear-gradient(to bottom, rgba(255, 255, 255, 1), rgba(255, 255, 255, 0));
+    z-index: 1;
+  }
+  
+  /* Logout Button Styling */
+  .logout-container {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    max-width: 600px; /* Match the container width */
+    margin: 0 auto; /* Center the logout button container */
+    text-align: center;
+    padding: 10px;
+    background-color: #fff;
+  }
+  
+  .logout-button {
+    padding: 10px 20px;
+    background-color: #ff4d4d;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+  }
+  
+  .logout-button:hover {
+    background-color: #e04343;
+  }
