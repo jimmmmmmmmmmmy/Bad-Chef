@@ -32,21 +32,21 @@ const ScrollableRecipeList: React.FC<ScrollableRecipeListProps> = ({
 
   return (
     <div className="recipe-list-container">
-      {recipes.map((item, index) => (
-        <div className="card-wrapper" key={index}>
+      {recipes.map((item) => (
+        <div className="card-wrapper" key={item.id}> {/* Use item.id as key */}
           <RecipeCard
-            imageSource={item.imageSource || "/default-recipe-image.png"} // Use a default image if none provided
+            imageSource={item.imageSource || "/default-recipe-image.png"}
             title={item.title}
             creator={`by ${item.author_id || "Unknown"}`}
             onClick={() => handleRecipePress(item)}
           />
           <button
             className={`heart-icon-container ${
-              likedRecipes.has(index) ? "heart-icon-container-liked" : ""
+              likedRecipes.has(item.id) ? "heart-icon-container-liked" : ""
             }`}
-            onClick={() => toggleLike(index)}
+            onClick={() => toggleLike(item.id)}
           >
-            {likedRecipes.has(index) ? "❤️" : "🤍"}
+            {likedRecipes.has(item.id) ? "❤️" : "🤍"}
           </button>
         </div>
       ))}

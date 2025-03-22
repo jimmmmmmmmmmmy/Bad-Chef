@@ -24,7 +24,7 @@
         "Serve meatballs and sauce over spaghetti."
       ],
       "imageSource": "../assets/spaghetti_meatballs.png",
-      "category": ["Italian", "Dinner"]
+      "category": "Dinner"
     },
     {
       "id": "2",
@@ -48,7 +48,7 @@
         "Season with salt, pepper, and red pepper flakes if desired."
       ],
       "imageSource": "../assets/avocado_toast.png",
-      "category": ["Breakfast", "Vegetarian"]
+      "category": "Breakfast"
     },
     {
       "id": "3",
@@ -74,7 +74,7 @@
         "Serve hot, optionally over rice."
       ],
       "imageSource": "../assets/chicken_stirfry.png",
-      "category": ["Chinese", "Dinner", "Quick Meals"]
+      "category": "Dinner"
     },
     {
       "id": "4",
@@ -100,7 +100,7 @@
         "Serve immediately."
       ],
       "imageSource": "../assets/bruschetta.png",
-      "category": ["Italian", "Appetizer"]
+      "category": "Appetizer"
     },
     {
       "id": "5",
@@ -127,7 +127,7 @@
         "Serve with crackers or bread for dipping."
       ],
       "imageSource": "../assets/spinach_artichoke_dip.png",
-      "category": ["Appetizer", "Party Food"]
+      "category": "Appetizer"
     },
     {
       "id": "6",
@@ -153,7 +153,7 @@
         "Roll up burritos and serve hot."
       ],
       "imageSource": "../assets/breakfast_burrito.png",
-      "category": ["Breakfast", "Quick Meals"]
+      "category": "Breakfast"
     },
     {
       "id": "7",
@@ -177,7 +177,7 @@
         "Sprinkle with fresh ground black pepper and serve."
       ],
       "imageSource": "../assets/caesar_salad.png",
-      "category": ["Lunch", "Salad"]
+      "category": "Lunch"
     },
     {
       "id": "8",
@@ -204,6 +204,6 @@
         "Assemble sandwich with chicken, lettuce, sliced tomato, and red onion."
       ],
       "imageSource": "../assets/grilled_chicken_sandwich.png",
-      "category": ["Lunch", "Sandwich"]
+      "category": "Lunch"
     }
   ]

@@ -2,22 +2,22 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { Recipe } from "./types";
 import { Link, useNavigate } from "react-router-dom";
-import SearchField from "./components/SearchField"; // Adapted for React
-import ScrollableRecipeList from "./components/ScrollableRecipeList.tsx"; // Adapted for React
-import "./Recipes.css"; // New CSS file for web styling
-
+import SearchField from "./components/SearchField";
+import ScrollableRecipeList from "./components/ScrollableRecipeList.tsx";
+import "./Recipes.css";
 
 function Recipes() {
   const [recipes, setRecipes] = useState<Recipe[]>([]);
   const [filteredRecipes, setFilteredRecipes] = useState<Recipe[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [activeFilter, setActiveFilter] = useState<string>("All");
   const navigate = useNavigate();
 
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (!token) {
-      navigate("/"); // Redirect to login if not authenticated
+      navigate("/");
       return;
     }
 
@@ -25,7 +25,7 @@ function Recipes() {
       try {
         const response = await axios.get("http://localhost:8000/recipes/");
         setRecipes(response.data);
-        setFilteredRecipes(response.data); // Initially, no filtering
+        setFilteredRecipes(response.data);
       } catch (err) {
         setError("Failed to fetch recipes");
         console.error(err);
@@ -53,31 +53,79 @@ function Recipes() {
     }
   };
 
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div>{error}</div>;
+  const handleFilter = (category: string) => {
+    setActiveFilter(category);
+    if (category === "All") {
+      setFilteredRecipes(recipes);
+    } else {
+      const filtered = recipes.filter((recipe) =>
+        recipe.category === category
+      );
+      setFilteredRecipes(filtered);
+    }
+  };
+
+  if (loading) return <div className="loading">Loading...</div>;
+  if (error) return <div className="error">{error}</div>;
 
   return (
     <div className="recipes-container">
+      {/* Navigation Bar */}
+      <nav className="nav-bar">
+        <div className="nav-logo">
+          <img src="/logo.png" alt="Logo" className="logo-icon" />
+          <span className="logo-text">Recipe Platform</span>
+        </div>
+        <ul className="nav-links">
+          <li><a href="#">All Recipes</a></li>
+          <li><a href="#">Quick & Easy</a></li>
+          <li><a href="#">Dinner</a></li>
+          <li><a href="#">Desserts</a></li>
+          <li><a href="#">Pantry</a></li>
+          <li><a href="#">Travel</a></li>
+          <li><a href="#">About</a></li>
+        </ul>
+      </nav>
+
       {/* Header */}
       <div className="header">
-        <Link to="/">
-          <img
-            className="icon"
-            src="/vuesaxlineararrowleft2.png"
-            alt="Back"
-          />
-        </Link>
-        <h1 className="title">Recipe Catalog</h1>
-        <a href="/support">
-          <img
-            className="icon"
-            src="/help-circle.png"
-            alt="Help"
-          />
-        </a>
+        <h1 className="title">Explore Recipes</h1>
+              {/* Filter Buttons */}
+      <div className="filter-buttons">
+        <button
+          className={`filter-btn ${activeFilter === "All" ? "active" : ""}`}
+          onClick={() => handleFilter("All")}
+        >
+          All
+        </button>
+        <button
+          className={`filter-btn ${activeFilter === "Breakfast" ? "active" : ""}`}
+          onClick={() => handleFilter("Breakfast")}
+        >
+          Breakfast
+        </button>
+        <button
+          className={`filter-btn ${activeFilter === "Lunch" ? "active" : ""}`}
+          onClick={() => handleFilter("Lunch")}
+        >
+          Lunch
+        </button>
+        <button
+          className={`filter-btn ${activeFilter === "Appetizer" ? "active" : ""}`}
+          onClick={() => handleFilter("Appetizer")}
+        >
+          Appetizers
+        </button>
+        <button
+          className={`filter-btn ${activeFilter === "Dinner" ? "active" : ""}`}
+          onClick={() => handleFilter("Dinner")}
+        >
+          Dinner
+        </button>
+      </div>
       </div>
 
-      {/* Search Bar and Filter */}
+      {/* Search Bar and Filter
       <div className="search-container">
         <div className="search-field-wrapper">
           <SearchField onSearch={handleSearch} placeholder="Search recipes" />
@@ -90,6 +138,9 @@ function Recipes() {
           />
         </button>
       </div>
+       */}
+
+
 
       {/* Content */}
       <div className="content-container">
@@ -100,7 +151,7 @@ function Recipes() {
         </div>
       </div>
 
-      {/* Logout Button (Fixed at Bottom) */}
+      {/* Logout Button (Fixed at Bottom) 
       <div className="logout-container">
         <button
           className="logout-button"
@@ -112,6 +163,7 @@ function Recipes() {
           Log Out
         </button>
       </div>
+      */}
     </div>
   );
 }
