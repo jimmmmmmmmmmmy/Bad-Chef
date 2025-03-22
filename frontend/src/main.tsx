@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter, Routes, Route, Navigate, useNavigate } from "react-router-dom";
-import LoginSignup from "./App.tsx"; // Now the login/signup page
+import LoginSignup from "./App.tsx"; 
 import RecipeDetail from "./RecipeDetail.tsx";
 import Recipes from "./Recipes.tsx";
+import Favorites from "./Favorites.tsx";
 import { validateToken, logout } from "./utils/auth.ts";
 import "./index.css";
 
@@ -108,6 +109,14 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
           element={
             <AuthenticatedRoute>
               <RecipeDetail />
+            </AuthenticatedRoute>
+          }
+        />
+        <Route
+          path="/favorites"
+          element={
+            <AuthenticatedRoute>
+              <Favorites />
             </AuthenticatedRoute>
           }
         />

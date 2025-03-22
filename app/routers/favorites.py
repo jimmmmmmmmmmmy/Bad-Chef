@@ -1,8 +1,9 @@
 from app.auth import get_current_user
 from app.database import get_session
-from app.models import Favorite, FavoriteCreate, FavoriteRead, Recipe, User
+from app.models import Favorite, FavoriteCreate, FavoriteRead, FavoriteReadDetailed, Recipe, User
 from fastapi import APIRouter, Depends, HTTPException
 from sqlmodel import select, Session
+from typing import List
 
 import logging
 
@@ -35,7 +36,7 @@ async def create_favorite(favorite: FavoriteCreate, session: Session = Depends(g
 
 @router.get("/", response_model=FavoriteRead)
 async def read_favorite(recipe_id: int, session: Session = Depends(get_session), current_user: User = Depends(get_current_user)):
-    """Retrieve a user's rating for a recipe."""
+    """Retrieve if user's favorited the recipe."""
     db_favorite = session.exec(
         select(Favorite).where(
             Favorite.user_id == current_user.id,
@@ -64,3 +65,29 @@ async def remove_favorite(favorite: FavoriteCreate, session: Session = Depends(g
     session.commit()
     logger.info(f"Removed favorite: user_id={current_user.id}, recipe_id={favorite.recipe_id}")
     return {"message": f"Favorite (user_id={current_user.id}, recipe_id={favorite.recipe_id}) removed successfully"}
+
+@router.get("/all", response_model=List[FavoriteReadDetailed])
+async def read_all_favorites(
+    session: Session = Depends(get_session),
+    current_user: User = Depends(get_current_user)
+):
+    # Join Favorite with Recipe to get recipe detail
+    favorites = session.exec(
+        select(Favorite, Recipe)
+        .join(Recipe, Favorite.recipe_id == Recipe.id)
+        .where(Favorite.user_id == current_user.id)
+    ).all()
+
+    return [
+        FavoriteReadDetailed(
+            id=favorite.id,
+            user_id=favorite.user_id,
+            recipe_id=favorite.recipe_id,
+            title=recipe.title,
+            author_id=recipe.author_id,
+            #
+            # Add images to db later
+            # image_source=recipe.image_source
+        )
+        for favorite, recipe in favorites
+    ]

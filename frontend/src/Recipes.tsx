@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { Recipe } from "./types";
 import { Link, useNavigate } from "react-router-dom";
-import SearchField from "./components/SearchField";
 import ScrollableRecipeList from "./components/ScrollableRecipeList.tsx";
 import "./Recipes.css";
 
@@ -79,7 +78,7 @@ function Recipes() {
           </button>
         </div>
         <ul className="nav-links">
-          <li><a href="#">Favorites</a></li>
+          <li><a href="/Favorites">Favorites</a></li>
           <li><a href="#">Pantry</a></li>
           <li><a href="#">Travel</a></li>
           <li><a href="#">About</a></li>

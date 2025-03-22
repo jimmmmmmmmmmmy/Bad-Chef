@@ -11,6 +11,7 @@
   .card-wrapper {
     position: relative;
     margin-bottom: 20px;
+    
   }
   
   .card {
@@ -64,6 +65,15 @@
     outline: none !important;
     border: none;
   }
+
+  .card-wrapper {
+    transition: opacity 0.2s ease;
+  }
+  
+  .card-wrapper.dissolve {
+    opacity: 0;
+  }
+
   /* Responsive adjustments */
   @media (max-width: 1024px) {
     .recipe-list-container {

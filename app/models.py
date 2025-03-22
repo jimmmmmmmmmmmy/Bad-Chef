@@ -69,3 +69,8 @@ class FavoriteCreate(SQLModel):
 
 class FavoriteRead(Favorite):
     pass
+
+class FavoriteReadDetailed(Favorite):
+    title: str
+    author_id: str
+    image_source: str | None
