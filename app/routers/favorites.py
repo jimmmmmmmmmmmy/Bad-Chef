@@ -85,9 +85,8 @@ async def read_all_favorites(
             recipe_id=favorite.recipe_id,
             title=recipe.title,
             author_id=recipe.author_id,
-            #
-            # Add images to db later
-            # image_source=recipe.image_source
+            category=recipe.category,
+            # image_source=recipe.image_source or None
         )
         for favorite, recipe in favorites
     ]

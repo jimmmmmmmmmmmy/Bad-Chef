@@ -6,11 +6,10 @@ html, body {
     background-color: #fff;
     margin: 0;
     padding: 0;
-    min-width: 1200px;
     height: 100%;
     width: 100%;
   }
-  
+
   .recipes-container {
     margin: 0 auto;
     flex: 1;
@@ -19,7 +18,6 @@ html, body {
     padding-bottom: 60px;
     max-width: 1200px;
     width: 100%;
-    min-width: 1200px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -213,7 +211,6 @@ html, body {
     padding: 0;
     width: 100%;
     max-width: 1200px; /* Match container width */
-    min-width: 1200px;
     margin: 0 auto; /* Center the content */
   }
   
@@ -234,7 +231,6 @@ html, body {
     margin: 0 auto;
     display: grid;
     justify-content: center;
-    min-width: 1200px;
     min-height: 100%; /* Stretches to fill parent */
   }
   

@@ -87,6 +87,7 @@ html, body {
     margin-top: 20px;
     margin-left: 45px;
     margin-right: 5px;
+    flex-wrap: wrap;
   }
   
   .nav-links li {

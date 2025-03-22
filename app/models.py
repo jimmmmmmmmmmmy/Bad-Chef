@@ -71,6 +71,9 @@ class FavoriteRead(Favorite):
     pass
 
 class FavoriteReadDetailed(Favorite):
+    id: int
+    recipe_id: int
     title: str
-    author_id: str
-    image_source: str | None
+    author_id: int
+    category: str # LOOOOOL forgot to pass this to frontend LMAOOOO
+    image_source: Optional[str]
