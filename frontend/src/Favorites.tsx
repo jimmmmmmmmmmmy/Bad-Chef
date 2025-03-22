@@ -65,7 +65,9 @@ function Favorites() {
       <div className="header">
         <h1 className="title">Favorites</h1>
       </div>
+      
       <div className="content-container">
+        
         <ScrollableRecipeList recipes={recipes} onUnlike={handleUnlike} />
       </div>
     </div>
