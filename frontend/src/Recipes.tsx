@@ -80,9 +80,7 @@ function Recipes() {
         </div>
         <ul className="nav-links">
           <li><a href="#">All Recipes</a></li>
-          <li><a href="#">Quick & Easy</a></li>
-          <li><a href="#">Dinner</a></li>
-          <li><a href="#">Desserts</a></li>
+          <li><a href="#">Favorites</a></li>
           <li><a href="#">Pantry</a></li>
           <li><a href="#">Travel</a></li>
           <li><a href="#">About</a></li>
@@ -91,7 +89,7 @@ function Recipes() {
 
       {/* Header */}
       <div className="header">
-        <h1 className="title">Explore Recipes</h1>
+        <h1 className="title">Recipes</h1>
               {/* Filter Buttons */}
       <div className="filter-buttons">
         <button
