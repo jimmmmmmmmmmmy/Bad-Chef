@@ -36,25 +36,46 @@ html, body {
     background-color: #fff;
     border-bottom: 1px solid #e0e0e0;
     position: sticky;
-    top: 0;
+    margin-top: 12px;
     z-index: 1000;
   }
   
   .nav-logo {
     display: flex;
     align-items: center;
+    outline: none; /* Removes ugly blue outline */
   }
   
+  .logo-button {
+    display: flex;
+    align-items: center;
+    border: none;
+    background: none;
+    padding: 0;
+    cursor: pointer;
+    outline: none; /* Removes ugly blue outline */
+  }
+  .logo-button, .logo-button:focus, .logo-button:active {
+    outline: none;
+    border: none;
+    box-shadow: none; /* Just in case it’s a shadow pretending to be an outline */
+  }
+  
+  .nav-logo:hover .logo-text {
+    color: #e74c3c;
+  }
+
   .logo-icon {
-    width: 40px;
-    height: 40px;
-    margin-right: 10px;
+    width: 80px; /* Increased from 40px */
+    height: 80px; /* Increased from 40px */
+    margin-right: 8px;
   }
   
   .logo-text {
-    font-size: 1.5rem;
+    font-size: 2.5rem; /* Increased from 1.5rem */
     font-weight: bold;
     color: #333;
+    user-select: none; /* Prevents text highlighting */
   }
   
   .nav-links {

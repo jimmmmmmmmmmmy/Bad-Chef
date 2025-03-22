@@ -73,8 +73,10 @@ function Recipes() {
       {/* Navigation Bar */}
       <nav className="nav-bar">
         <div className="nav-logo">
-          <img src="/logo.png" alt="Logo" className="logo-icon" />
-          <span className="logo-text">Recipe Platform</span>
+          <button className="logo-button" onClick={() => window.location.href = '/'}>
+            <img src="/logo.png" alt="Logo" className="logo-icon" />
+            <span className="logo-text">Bad Chef</span>
+          </button>
         </div>
         <ul className="nav-links">
           <li><a href="#">All Recipes</a></li>
@@ -144,7 +146,6 @@ function Recipes() {
 
       {/* Content */}
       <div className="content-container">
-        <h2 className="source-text">All Recipes</h2>
         <div className="recipe-list-wrapper">
           <div className="faded-edge" />
           <ScrollableRecipeList recipes={filteredRecipes} />
