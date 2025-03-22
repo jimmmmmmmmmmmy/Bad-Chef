@@ -1,0 +1,60 @@
+.recipe-detail-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #fff; /* White background */
+    color: #333; /* Dark text for readability */
+    min-height: 100vh; /* Ensure it fills the viewport */
+  }
+  
+  .recipe-title-full {
+    font-size: 2.5rem;
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: #2c3e50; 
+  }
+  
+  .recipe-section {
+    margin-bottom: 30px;
+  }
+  
+  .recipe-section h2 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 10px;
+    color: #34495e; /* Slightly lighter shade for headings */
+  }
+  
+  .recipe-section p {
+    font-size: 1rem;
+    line-height: 1.6;
+  }
+  
+  .recipe-list {
+    list-style-position: inside; /* Ensure bullets/numbers are inside the list */
+    padding-left: 0;
+  }
+  
+  .recipe-list li {
+    font-size: 1rem;
+    line-height: 1.6;
+    margin-bottom: 8px;
+  }
+  
+  /* Styling for loading, error, and not-found states */
+  .loading,
+  .error,
+  .not-found {
+    text-align: center;
+    font-size: 1.2rem;
+    margin-top: 50px;
+    color: #ffffff;
+  }
+  
+  .error {
+    color: #e74c3c; /* Red for error messages */
+  }
+  
+  .not-found {
+    color: #7f8c8d; /* Gray for not-found messages */
+  }
