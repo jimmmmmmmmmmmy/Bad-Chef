@@ -35,7 +35,7 @@ const ScrollableRecipeList: React.FC<ScrollableRecipeListProps> = ({
       {recipes.map((item) => (
         <div className="card-wrapper" key={item.id}> {/* Use item.id as key */}
           <RecipeCard
-            imageSource={item.imageSource || "/default-recipe-image.png"}
+            imageSource={item.imageSource || "assets/bruschetta.png"}
             title={item.title}
             creator={`by ${item.author_id || "Unknown"}`}
             onClick={() => handleRecipePress(item)}

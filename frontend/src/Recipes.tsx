@@ -79,7 +79,6 @@ function Recipes() {
           </button>
         </div>
         <ul className="nav-links">
-          <li><a href="#">All Recipes</a></li>
           <li><a href="#">Favorites</a></li>
           <li><a href="#">Pantry</a></li>
           <li><a href="#">Travel</a></li>

@@ -29,13 +29,6 @@
     opacity: 0.8;
   }
   
-  .recipe-info {
-    position: static;
-    color: #333;
-    padding: 10px 0;
-    text-align: left;
-  }
-  
   .recipe-title {
     font-size: 1.2rem;
     font-weight: bold;
@@ -62,12 +55,15 @@
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
     border: none;
     cursor: pointer;
+    outline: none;
   }
   
-  .heart-icon-container-liked {
-    background-color: #ff0000;
+  .heart-icon-container-liked, .heart-icon-container-liked:active, .heart-icon-container:focus, .heart-icon-container-liked:focus {
+    background-color: #fff;
+    box-shadow: none;
+    outline: none !important;
+    border: none;
   }
-  
   /* Responsive adjustments */
   @media (max-width: 1024px) {
     .recipe-list-container {
