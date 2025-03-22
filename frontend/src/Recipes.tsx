@@ -88,7 +88,7 @@ function Recipes() {
 
       {/* Header */}
       <div className="header">
-        <h1 className="title">Recipes</h1>
+        <h1 className="title">Explore</h1>
               {/* Filter Buttons */}
       <div className="filter-buttons">
         <button
