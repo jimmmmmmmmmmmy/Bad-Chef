@@ -29,6 +29,7 @@ class Recipe(SQLModel, table=True):
     instructions: str
     author_id: int = Field(foreign_key="user.id")
     created_at: datetime = Field(default_factory=lambda: datetime.now(dt.UTC))
+    imageSource: str
     category: Optional[str] = Field(default=None) # Changed to a single string
 
 class RecipeCreate(SQLModel):
@@ -76,4 +77,4 @@ class FavoriteReadDetailed(Favorite):
     title: str
     author_id: int
     category: str # LOOOOOL forgot to pass this to frontend LMAOOOO
-    image_source: Optional[str]
+    imageSource: str

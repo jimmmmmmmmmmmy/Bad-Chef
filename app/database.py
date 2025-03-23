@@ -36,7 +36,8 @@ def create_db_and_tables(db_engine: Engine = engine):
                     ingredients=ingredients_str,
                     instructions=instructions_str,
                     author_id=randint(1, 10),
-                    category=recipe_data.get("category", "") # Added category field
+                    category=recipe_data.get("category", ""), # Added category field
+                    imageSource=recipe_data["imageSource"]
                 )
                 session.add(sample_recipe)
             
