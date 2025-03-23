@@ -23,7 +23,7 @@ function Favorites() {
   
         const fetchFavorites = async () => {
         try {
-            const response = await axios.get("http://localhost:8000/favorites/all", {
+            const response = await axios.get("http://192.168.1.203:8000/favorites/all", {
             headers: { Authorization: `Bearer ${token}` },
             });
             const favoriteRecipes = response.data.map((fav: any) => ({

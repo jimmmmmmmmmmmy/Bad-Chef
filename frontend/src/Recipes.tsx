@@ -22,7 +22,7 @@ function Recipes() {
 
     const fetchRecipes = async () => {
       try {
-        const response = await axios.get("http://localhost:8000/recipes/");
+        const response = await axios.get("http://192.168.1.203:8000/recipes/");
         setRecipes(response.data);
         setFilteredRecipes(response.data);
       } catch (err) {

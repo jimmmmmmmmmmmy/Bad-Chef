@@ -16,13 +16,13 @@ function LoginSignup() {
     try {
       if (isSignup) {
         // Signup
-        await axios.post("http://localhost:8000/users/", {
+        await axios.post("http://192.168.1.203:8000/users/", {
           username,
           email,
           password,
         });
         // Auto-login after signup
-        const loginResponse = await axios.post("http://localhost:8000/users/token", {
+        const loginResponse = await axios.post("http://192.168.1.203:8000/users/token", {
           username,
           password,
         });
@@ -32,12 +32,14 @@ function LoginSignup() {
         navigate("/recipes");
       } else {
         // Login
-        const response = await axios.post("http://localhost:8000/users/token", {
+        const response = await axios.post("http://192.168.1.203:8000/users/token", {
           username,
           password,
         });
+        console.log("Login response:", response.status, response.data);
         const token = response.data.access_token;
         localStorage.setItem("token", token);
+        console.log("Navigating to /recipes");
         axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
         navigate("/recipes");
       }
