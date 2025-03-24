@@ -31,7 +31,7 @@ function Favorites() {
             title: fav.title,
             author_id: fav.author_id,
             category: fav.category,
-            imageSource: fav.image_source || "assets/bruschetta.png",
+            imageSource: fav.imageSource || "assets/bruschetta.png",
             }));
             setRecipes(favoriteRecipes);
             setFilteredRecipes(favoriteRecipes);
