@@ -6,8 +6,6 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { logout } from "../utils/auth.ts";
 
-const API_BASE_URL = `${process.env.BACKEND_URL}/favorites`;
-
 interface ScrollableRecipeListProps {
   recipes: Recipe[];
   onUnlike?: (recipeId: number) => void;
@@ -20,7 +18,7 @@ const ScrollableRecipeList: React.FC<ScrollableRecipeListProps> = ({
   const [likedRecipes, setLikedRecipes] = useState<Set<number>>(new Set());
   const [removingRecipes] = useState<Set<number>>(new Set());
   const navigate = useNavigate();
-  
+  const API_BASE_URL = `${process.env.BACKEND_URL}/favorites`;
 
   // Fetch all favorites on mount
   useEffect(() => {

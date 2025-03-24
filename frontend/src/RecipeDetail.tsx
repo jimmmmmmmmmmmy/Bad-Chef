@@ -14,7 +14,7 @@ function RecipeDetail() {
   useEffect(() => {
     const fetchRecipe = async () => {
       try {
-        const response = await axios.get(`${BACKEND_URL}recipes/${id}`);
+        const response = await axios.get(`${BACKEND_URL}/recipes/${id}`);
         setRecipe(response.data);
       } catch (err) {
         setError("Failed to fetch recipe");

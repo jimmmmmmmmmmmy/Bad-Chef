@@ -20,31 +20,15 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
         setIsAuthenticated(false);
         return;
       }
-
       const isValid = await validateToken(token);
-      if (!isValid) {
-        // If token is invalid, clear it and redirect to login
-        logout(navigate);
-        setIsAuthenticated(false);
-      } else {
-        setIsAuthenticated(true);
-      }
+      setIsAuthenticated(isValid);
+      if (!isValid) logout(navigate);
     };
-
     checkToken();
   }, [navigate]);
 
-  // Show a loading state while validating the token
-  if (isAuthenticated === null) {
-    return <div>Loading...</div>;
-  }
-
-  // If authenticated, redirect to /recipes when trying to access /
-  if (isAuthenticated && window.location.pathname === "/") {
-    return <Navigate to="/recipes" replace />;
-  }
-
-  return children;
+  if (isAuthenticated === null) return <div>Loading...</div>;
+  return isAuthenticated ? <Navigate to="/recipes" replace /> : children;
 };
 
 // AuthenticatedRoute for protected routes (e.g., /recipes, /recipe/:id)

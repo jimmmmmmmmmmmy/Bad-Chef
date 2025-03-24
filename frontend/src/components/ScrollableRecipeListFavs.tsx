@@ -18,7 +18,7 @@ const ScrollableRecipeList: React.FC<ScrollableRecipeListProps> = ({
   const [likedRecipes, setLikedRecipes] = useState<Set<number>>(new Set());
   const [removingRecipes, setRemovingRecipes] = useState<Set<number>>(new Set());
   const navigate = useNavigate();
-  const API_BASE_URL = `${process.env.BACKEND_URL}/favorites`;
+  const API_BASE_URL = `${process.env.BACKEND_URL}/favorites`; 
 
   // Fetch all favorites on mount
   useEffect(() => {
@@ -44,7 +44,7 @@ const ScrollableRecipeList: React.FC<ScrollableRecipeListProps> = ({
     };
 
     fetchFavorites();
-  }, [navigate]); 
+  }, [navigate]);
 
   const toggleLike = async (recipeId: number) => {
     const token = localStorage.getItem("token");
@@ -111,11 +111,11 @@ const ScrollableRecipeList: React.FC<ScrollableRecipeListProps> = ({
     <div className="recipe-list-container">
       {recipes.map((item) => (
         <div
-        className={`card-wrapper ${
-          removingRecipes.has(item.id) ? "dissolve" : ""
-        }`}
-        key={item.id}
-      >
+          className={`card-wrapper ${
+            removingRecipes.has(item.id) ? "dissolve" : ""
+          }`}
+          key={item.id}
+        >
           <RecipeCard
             imageSource={item.imageSource || "assets/bruschetta.png"}
             title={item.title}
