@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { Recipe } from "./types";
 import { Link, useNavigate } from "react-router-dom";
-import ScrollableRecipeList from "./components/ScrollableRecipeList.tsx";
+import ScrollableRecipeList from "./components/ScrollableRecipeListFavs.tsx";
 import "./Recipes.css";
 
 function Favorites() {

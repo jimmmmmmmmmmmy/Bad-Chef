@@ -16,7 +16,7 @@ const ScrollableRecipeList: React.FC<ScrollableRecipeListProps> = ({
   onUnlike,
 }) => {
   const [likedRecipes, setLikedRecipes] = useState<Set<number>>(new Set());
-  const [removingRecipes] = useState<Set<number>>(new Set());
+  const [removingRecipes, setRemovingRecipes] = useState<Set<number>>(new Set());
   const navigate = useNavigate();
   const API_BASE_URL = "http://192.168.1.203:8000/favorites";
 
@@ -44,7 +44,7 @@ const ScrollableRecipeList: React.FC<ScrollableRecipeListProps> = ({
     };
 
     fetchFavorites();
-  }, [navigate]);
+  }, [navigate]); 
 
   const toggleLike = async (recipeId: number) => {
     const token = localStorage.getItem("token");
@@ -61,12 +61,21 @@ const ScrollableRecipeList: React.FC<ScrollableRecipeListProps> = ({
           data: { recipe_id: recipeId },
           headers: { Authorization: `Bearer ${token}` },
         });
-        setLikedRecipes((prevLiked) => {
-          const newLiked = new Set(prevLiked);
-          newLiked.delete(recipeId); // Fixed: Remove on unlike
-          return newLiked;
+        // Trigger dissolve animation before removal
+        setRemovingRecipes((prev) => {
+          const newSet = new Set(prev);
+          newSet.add(recipeId);
+          return newSet;
         });
-        if (onUnlike) onUnlike(recipeId);
+        // Delay removal to allow animation to play
+        setTimeout(() => {
+          setLikedRecipes((prevLiked) => {
+            const newLiked = new Set(prevLiked);
+            newLiked.delete(recipeId);
+            return newLiked;
+          });
+          if (onUnlike) onUnlike(recipeId); // Notify parent to remove recipe
+        }, 150); // Match animation duration
       } else {
         await axios.post(
           API_BASE_URL,
@@ -75,7 +84,7 @@ const ScrollableRecipeList: React.FC<ScrollableRecipeListProps> = ({
         );
         setLikedRecipes((prevLiked) => {
           const newLiked = new Set(prevLiked);
-          newLiked.add(recipeId); // Add on like
+          newLiked.add(recipeId);
           return newLiked;
         });
       }
@@ -102,11 +111,11 @@ const ScrollableRecipeList: React.FC<ScrollableRecipeListProps> = ({
     <div className="recipe-list-container">
       {recipes.map((item) => (
         <div
-          className={`card-wrapper ${
-            removingRecipes.has(item.id) ? "dissolve" : ""
-          }`}
-          key={item.id}
-        >
+        className={`card-wrapper ${
+          removingRecipes.has(item.id) ? "dissolve" : ""
+        }`}
+        key={item.id}
+      >
           <RecipeCard
             imageSource={item.imageSource || "assets/bruschetta.png"}
             title={item.title}
