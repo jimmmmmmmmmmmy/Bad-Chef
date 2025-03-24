@@ -12,6 +12,7 @@ function Recipes() {
   const [error, setError] = useState<string | null>(null);
   const [activeFilter, setActiveFilter] = useState<string>("All");
   const navigate = useNavigate();
+  const BACKEND_URL = process.env.BACKEND_URL
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -22,7 +23,7 @@ function Recipes() {
 
     const fetchRecipes = async () => {
       try {
-        const response = await axios.get("http://192.168.1.203:8000/recipes/");
+        const response = await axios.get(`${BACKEND_URL}/recipes/`);
         setRecipes(response.data);
         setFilteredRecipes(response.data);
       } catch (err) {

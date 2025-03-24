@@ -9,11 +9,12 @@ function RecipeDetail() {
   const [recipe, setRecipe] = useState<Recipe | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const BACKEND_URL = process.env.BACKEND_URL
 
   useEffect(() => {
     const fetchRecipe = async () => {
       try {
-        const response = await axios.get(`http://192.168.1.203:8000/recipes/${id}`);
+        const response = await axios.get(`${BACKEND_URL}recipes/${id}`);
         setRecipe(response.data);
       } catch (err) {
         setError("Failed to fetch recipe");

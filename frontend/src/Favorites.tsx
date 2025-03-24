@@ -11,9 +11,8 @@ function Favorites() {
     const [loading, setLoading] = useState(true);
     const [activeFilter, setActiveFilter] = useState<string>("All");
     const navigate = useNavigate();
+    const API_BASE_URL = process.env.BACKEND_URL
   
-
-
     useEffect(() => {
       const token = localStorage.getItem("token");
       if (!token) {
@@ -23,7 +22,7 @@ function Favorites() {
   
         const fetchFavorites = async () => {
         try {
-            const response = await axios.get("http://192.168.1.203:8000/favorites/all", {
+            const response = await axios.get(`${BACKEND_URL}favorites/all`, {
             headers: { Authorization: `Bearer ${token}` },
             });
             const favoriteRecipes = response.data.map((fav: any) => ({

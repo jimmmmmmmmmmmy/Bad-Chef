@@ -10,19 +10,20 @@ function LoginSignup() {
   const [isSignup, setIsSignup] = useState(false); // Toggle between signup/login
   const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
+  const API_BASE_URL = process.env.BACKEND_URL
 
   const handleSubmit = async () => {
     setError(null);
     try {
       if (isSignup) {
         // Signup
-        await axios.post("http://192.168.1.203:8000/users/", {
+        await axios.post(`${API_BASE_URL}/users/`, {
           username,
           email,
           password,
         });
         // Auto-login after signup
-        const loginResponse = await axios.post("http://192.168.1.203:8000/users/token", {
+        const loginResponse = await axios.post(`${API_BASE_URL}/users/token`, {
           username,
           password,
         });
@@ -32,7 +33,7 @@ function LoginSignup() {
         navigate("/recipes");
       } else {
         // Login
-        const response = await axios.post("http://192.168.1.203:8000/users/token", {
+        const response = await axios.post(`${API_BASE_URL}/users/token`, {
           username,
           password,
         });

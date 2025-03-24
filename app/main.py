@@ -6,10 +6,15 @@ from app.routers.users import router as users_router
 from app.routers.ratings import router as ratings_router
 from app.routers.recipes import router as recipes_router
 from app.routers.favorites import router as favorites_router
+from dotenv import load_dotenv
+import os
 import logging
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
+
+load_dotenv()
+FRONTEND_URL = os.getenv("FRONTEND_URL")
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -21,7 +26,7 @@ app = FastAPI(lifespan=lifespan)
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://192.168.1.203:5173"],
+    allow_origins=[FRONTEND_URL],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

@@ -1,11 +1,13 @@
 import axios from "axios";
 
+const BACKEND_URL = process.env.BACKEND_URL
+
 // Validate token via  backend
 export const validateToken = async (token: string | null): Promise<boolean> => {
   if (!token) return false;
 
   try {
-    const response = await axios.get("http://192.168.1.203:8000/users/me", {
+    const response = await axios.get(`${BACKEND_URL}users/me`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
