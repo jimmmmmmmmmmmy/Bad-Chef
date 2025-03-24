@@ -28,3 +28,4 @@ recipes.db # Explicitly exclude your DB file
 # VS Code
 .vscode/
 *.code-workspace
+.env
