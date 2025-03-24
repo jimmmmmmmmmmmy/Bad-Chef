@@ -3,6 +3,7 @@
       "id": "1",
       "title": "Spaghetti and Meatballs",
       "time": "30 Mins",
+      "serves": 2,
       "creator": "Italian Chef",
       "ingredients": [
         {"id": "spaghetti", "amount": 1, "unit": "lb"},
@@ -30,6 +31,7 @@
       "id": "2",
       "title": "Avocado Toast",
       "time": "10 Mins",
+      "serves": 2,
       "creator": "Brunch Enthusiast",
       "ingredients": [
         {"id": "whole_grain_bread", "amount": 2, "unit": "slice"},
@@ -54,6 +56,7 @@
       "id": "3",
       "title": "Chicken Stir Fry",
       "time": "25 Mins",
+      "serves": 2,
       "creator": "Quick Meal Pro",
       "ingredients": [
         {"id": "chicken_breast", "amount": 2, "unit": "piece"},
@@ -80,6 +83,7 @@
       "id": "4",
       "title": "Bruschetta",
       "time": "15 Mins",
+      "serves": 2,
       "creator": "Italian Appetizer Expert",
       "ingredients": [
         {"id": "baguette", "amount": 1, "unit": "piece"},
@@ -106,6 +110,7 @@
       "id": "5",
       "title": "Spinach and Artichoke Dip",
       "time": "30 Mins",
+      "serves": 2,
       "creator": "Party Snack Master",
       "ingredients": [
         {"id": "spinach", "amount": 10, "unit": "oz"},
@@ -133,6 +138,7 @@
       "id": "6",
       "title": "Breakfast Burrito",
       "time": "20 Mins",
+      "serves": 2,
       "creator": "Morning Wrap Master",
       "ingredients": [
         {"id": "tortilla", "amount": 4, "unit": "piece"},
@@ -159,6 +165,7 @@
       "id": "7",
       "title": "Caesar Salad",
       "time": "15 Mins",
+      "serves": 2,
       "creator": "Salad Enthusiast",
       "ingredients": [
         {"id": "romaine_lettuce", "amount": 1, "unit": "head"},
@@ -183,6 +190,7 @@
       "id": "8",
       "title": "Grilled Chicken Sandwich",
       "time": "25 Mins",
+      "serves": 2,
       "creator": "Sandwich Expert",
       "ingredients": [
         {"id": "chicken_breast", "amount": 2, "unit": "piece"},

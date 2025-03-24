@@ -14,7 +14,7 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 load_dotenv("../.env")
-FRONTEND_URL = os.getenv("FRONTEND_URL")
+FRONTEND_URL = os.getenv("VITE_FRONTEND_URL")
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):

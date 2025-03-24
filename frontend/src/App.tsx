@@ -10,7 +10,7 @@ function LoginSignup() {
   const [isSignup, setIsSignup] = useState(false); // Toggle between signup/login
   const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
-  const API_BASE_URL = process.env.BACKEND_URL
+  const API_BASE_URL = import.meta.env.VITE_BACKEND_URL
 
   const handleSubmit = async () => {
     setError(null);

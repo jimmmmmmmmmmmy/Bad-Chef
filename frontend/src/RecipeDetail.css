@@ -16,6 +16,7 @@
   
   .recipe-section {
     margin-bottom: 30px;
+    margin: 20px 0;
   }
   
   .recipe-section h2 {
@@ -57,4 +58,19 @@
   
   .not-found {
     color: #7f8c8d; /* Gray for not-found messages */
+  }
+
+  .recipe-details {
+    display: flex;
+    gap: 20px; /* Space between time and serving size */
+  }
+  
+  .recipe-details h3 {
+    margin: 0;
+    font-size: 1.1em;
+  }
+  
+  .recipe-details p {
+    margin: 0;
+    font-size: 1em;
   }

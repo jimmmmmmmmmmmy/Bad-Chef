@@ -8,4 +8,6 @@ export interface Recipe {
   created_at: string; 
   category?: string;
   imageSource?: string;
+  serves: number;
+  time: string;
 }

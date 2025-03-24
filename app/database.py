@@ -37,7 +37,9 @@ def create_db_and_tables(db_engine: Engine = engine):
                     instructions=instructions_str,
                     author_id=randint(1, 10),
                     category=recipe_data.get("category", ""), # Added category field
-                    imageSource=recipe_data["imageSource"]
+                    imageSource=recipe_data["imageSource"],
+                    serves=recipe_data["serves"],
+                    time=recipe_data["time"]
                 )
                 session.add(sample_recipe)
             

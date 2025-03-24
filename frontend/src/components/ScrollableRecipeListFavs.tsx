@@ -18,7 +18,7 @@ const ScrollableRecipeList: React.FC<ScrollableRecipeListProps> = ({
   const [likedRecipes, setLikedRecipes] = useState<Set<number>>(new Set());
   const [removingRecipes, setRemovingRecipes] = useState<Set<number>>(new Set());
   const navigate = useNavigate();
-  const API_BASE_URL = `${process.env.BACKEND_URL}/favorites`; 
+  const API_BASE_URL = `${import.meta.env.VITE_BACKEND_URL}/favorites`; 
 
   // Fetch all favorites on mount
   useEffect(() => {

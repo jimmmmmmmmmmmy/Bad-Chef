@@ -12,7 +12,7 @@ function Recipes() {
   const [error, setError] = useState<string | null>(null);
   const [activeFilter, setActiveFilter] = useState<string>("All");
   const navigate = useNavigate();
-  const BACKEND_URL = process.env.BACKEND_URL
+  const BACKEND_URL = import.meta.env.VITE_BACKEND_URL
 
   useEffect(() => {
     const token = localStorage.getItem("token");

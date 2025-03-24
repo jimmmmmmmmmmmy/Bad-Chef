@@ -31,6 +31,8 @@ class Recipe(SQLModel, table=True):
     created_at: datetime = Field(default_factory=lambda: datetime.now(dt.UTC))
     imageSource: str
     category: str
+    serves: int = 1 # Default if no serving size
+    time: str
 
 class RecipeCreate(SQLModel):
     """Input model for creating a recipe."""
@@ -38,6 +40,8 @@ class RecipeCreate(SQLModel):
     description: str
     ingredients: str
     instructions: str
+    serves: int = 1
+    time: str
     # Removed author_id as we're passing it in the post
 
 class RecipeRead(Recipe):
@@ -78,3 +82,5 @@ class FavoriteReadDetailed(Favorite):
     author_id: int
     category: str # LOOOOOL forgot to pass this to frontend LMAOOOO
     imageSource: str
+    time: str
+    serves: int

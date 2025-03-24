@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { Recipe } from "./types";
 import "./RecipeDetail.css";
 
@@ -9,7 +9,8 @@ function RecipeDetail() {
   const [recipe, setRecipe] = useState<Recipe | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const BACKEND_URL = process.env.BACKEND_URL
+  const navigate = useNavigate();
+  const BACKEND_URL = import.meta.env.VITE_BACKEND_URL
 
   useEffect(() => {
     const fetchRecipe = async () => {
@@ -55,11 +56,35 @@ function RecipeDetail() {
   };
 
   return (
+
+    <div className="recipes-container">
+      <nav className="nav-bar">
+        <div className="nav-logo">
+          <button className="logo-button" onClick={() => navigate("/")}>
+            <img src="/logo.png" alt="Logo" className="logo-icon" />
+            <span className="logo-text">Bad Chef</span>
+          </button>
+        </div>
+        <ul className="nav-links">
+          <li><a href="/Favorites">Favorites</a></li>
+          <li><a href="#">Pantry</a></li>
+          <li><a href="#">Travel</a></li>
+          <li><a href="#">About</a></li>
+        </ul>
+      </nav>
+
+
     <div className="recipe-detail-container">
       <h1 className="recipe-title-full">{recipe.title}</h1>
       <section className="recipe-section">
         <h2>Description</h2>
         <p>{recipe.description}</p>
+        <div className="recipe-details">
+          <h3>Time</h3>
+          <p>{recipe.time}</p>
+          <h3>Serving Size</h3>
+          <p>{recipe.serves}</p>
+        </div>
       </section>
       <section className="recipe-section">
         <h2>Ingredients</h2>
@@ -85,6 +110,7 @@ function RecipeDetail() {
         </p>
       </section> */}
     </div>
+  </div>
   );
 }
 
