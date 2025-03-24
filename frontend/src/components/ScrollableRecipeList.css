@@ -28,6 +28,8 @@
     height: 100%;
     object-fit: cover;
     opacity: 0.8;
+    /* This setting makes Recipe Cards consistently sized on mobile */
+    aspect-ratio: 4 / 3;
   }
   
   .recipe-title {
@@ -67,6 +69,7 @@
   }
 
   .card-wrapper {
+    margin-bottom: 20px;
     transition: opacity 0.2s ease;
   }
   

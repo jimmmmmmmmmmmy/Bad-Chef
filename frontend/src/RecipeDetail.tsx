@@ -76,13 +76,13 @@ function RecipeDetail() {
           ))}
         </ol>
       </section>
-      <section className="recipe-section">
-        <h2>Details</h2>
+      {/* <section className="recipe-section">
+      <h2>Details</h2>
         <p>
           <strong>Created At:</strong>{" "}
           {new Date(recipe.created_at).toLocaleString()}
         </p>
-      </section>
+      </section> */}
     </div>
   );
 }

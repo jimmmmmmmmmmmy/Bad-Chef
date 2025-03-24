@@ -198,12 +198,14 @@ html, body {
   }
   
   .filter-btn.active {
+    padding: 8px 16px;
+    border-radius: 2px;
+    border: 2px solid #333;
     background-color: #333;
     color: #fff;
     border-color: #333;
     box-shadow: none;
     outline: none;
-    border: none;
   }
   
   .content-container {
