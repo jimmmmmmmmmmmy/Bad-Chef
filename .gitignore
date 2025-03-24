@@ -28,6 +28,3 @@ recipes.db # Explicitly exclude your DB file
 # VS Code
 .vscode/
 *.code-workspace
-
-# Optional: Poetry lock file (uncomment if you want to exclude)
-# poetry.lock
