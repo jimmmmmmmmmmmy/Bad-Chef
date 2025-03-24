@@ -12,7 +12,7 @@ function Recipes() {
   const [error, setError] = useState<string | null>(null);
   const [activeFilter, setActiveFilter] = useState<string>("All");
   const navigate = useNavigate();
-  const BACKEND_URL = import.meta.env.VITE_BACKEND_URL
+  const BACKEND_URL = "http://192.168.1.203:8000";
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -23,12 +23,18 @@ function Recipes() {
 
     const fetchRecipes = async () => {
       try {
-        const response = await axios.get(`${BACKEND_URL}/recipes/`);
-        setRecipes(response.data);
-        setFilteredRecipes(response.data);
+        const response = await axios.get(`${BACKEND_URL}/recipes/`, {
+          headers: { Authorization: `Bearer ${token}` },  // Add token
+        });
+        console.log("Recipes fetch response:", response.data);  // Debug
+        const recipeData = Array.isArray(response.data) ? response.data : [];
+        setRecipes(recipeData);
+        setFilteredRecipes(recipeData);
       } catch (err) {
+        console.error("Failed to fetch recipes:", err);
         setError("Failed to fetch recipes");
-        console.error(err);
+        setRecipes([]);  // Ensure array on error
+        setFilteredRecipes([]);
       } finally {
         setLoading(false);
       }

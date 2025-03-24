@@ -10,7 +10,7 @@ function RecipeDetail() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
-  const BACKEND_URL = import.meta.env.VITE_BACKEND_URL
+  const BACKEND_URL = "http://192.168.1.203:8000";
 
   useEffect(() => {
     const fetchRecipe = async () => {
