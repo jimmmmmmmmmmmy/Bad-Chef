@@ -30,7 +30,7 @@ class Recipe(SQLModel, table=True):
     author_id: int = Field(foreign_key="user.id")
     created_at: datetime = Field(default_factory=lambda: datetime.now(dt.UTC))
     imageSource: str
-    category: Optional[str] = Field(default=None) # Changed to a single string
+    category: str
 
 class RecipeCreate(SQLModel):
     """Input model for creating a recipe."""
