@@ -1,3 +1,4 @@
+import json
 from app.models import User
 from app.auth import pwd_context
 from sqlmodel import select
@@ -91,11 +92,11 @@ def test_get_recipes_3(client, test_db):
     # Create user 1
     create_user(client, "testuser1", "test1@example.com")
     token1 = login_user(client, "testuser1")
-    create_recipe(client, token1, "Test Recipe 1", "Test 1", "Stuff 1", "Cook 1")
+    create_recipe(client, token1, "Test Recipe 1", "Test 1", "Stuff 1", ["Cook 1"])
     # Create user 2
     create_user(client, "testuser2", "test2@example.com")
     token2 = login_user(client, "testuser2")
-    create_recipe(client, token2, "Test Recipe 2", "Test 2", "Stuff 2", "Cook 2")
+    create_recipe(client, token2, "Test Recipe 2", "Test 2", "Stuff 2", ["Cook 2"])
     # Check if both recipes have been added and properly attributed
     response=client.get("/recipes/")
     logger.info(f"Recipes response: {response.text}")
@@ -121,7 +122,10 @@ def test_get_specific_recipe(client, test_db):
     assert data["title"] == "Test Recipe"
     assert data["description"] == "test"
     assert data["ingredients"] == "Stuff"
-    assert data["instructions"] == "Cook"
+    logger.info(data["instructions"])
+    assert data["instructions"] == '["Cook"]' # Match the JSON string >:|
+    assert json.loads(data["instructions"]) == ['Cook']
+
 
 def test_remove_recipe(client, test_db):
     """Not implemented for now."""

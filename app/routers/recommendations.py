@@ -11,3 +11,4 @@
 # on request, fetch embeddings, run kNN, return results?
 # knn for fast lookups
 # offline embedding to save time
+

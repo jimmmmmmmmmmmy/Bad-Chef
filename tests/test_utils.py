@@ -25,7 +25,10 @@ def login_user(client, username="testuser", password="password123"):
     assert response.status_code == 200, f"Login failed: {response.text}"
     return response.json()["access_token"]
 
-def create_recipe(client, token, title="Test Recipe", description="test", ingredients="Stuff", instructions="Cook", category="category", image_source="http://example.com/test.jpg", serves=1, time="30 Min"):
+def create_recipe(client, token, title="Test Recipe", description="test", \
+    ingredients="Stuff", instructions=["Cook"], category="category", \
+    image_source="http://example.com/test.jpg", serves=1, time="30 Min", \
+    tags=['Spicy', 'Ramen']):
     """Create a recipe with given token and return the response."""
     recipe_data = {
         "title": title,
@@ -35,7 +38,8 @@ def create_recipe(client, token, title="Test Recipe", description="test", ingred
         "category": category,
         "image_source": image_source,
         "serves": serves,
-        "time": time
+        "time": time,
+        "tags": tags
     }
     headers = {"Authorization": f"Bearer {token}"}
     response = client.post("/recipes/", json=recipe_data, headers=headers)
