@@ -4,6 +4,7 @@ from app.models import User, Rating, Recipe, RecipeRead, RecipeCreate
 from app.database import get_session
 from app.auth import get_current_user
 from typing import List
+import json
 import logging
 
 router = APIRouter()
@@ -16,11 +17,14 @@ async def create_recipe(recipe: RecipeCreate, session: Session = Depends(get_ses
     """Recipe creation for current user."""
     logger.info(f"Creating recipe for user: {current_user.username}, ID: {current_user.id}")
     try:
-        # Unpack recipe data and add author
-        db_recipe = Recipe(**recipe.model_dump(), author_id=current_user.id) 
+        # Convert tags list to JSON string
+        recipe_dict = recipe.model_dump()
+         # Convert List[str] to str, in the actual frontend it's all strings now
+        recipe_dict["tags"] = json.dumps(recipe_dict["tags"]) 
+        recipe_dict["author_id"] = current_user.id
+        db_recipe = Recipe(**recipe_dict)
         session.add(db_recipe)
         session.commit()
-        # Refresh for auto-generated fields
         session.refresh(db_recipe)
         logger.info(f"Recipe created: {db_recipe.id}")
         return db_recipe

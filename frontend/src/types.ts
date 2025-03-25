@@ -10,4 +10,5 @@ export interface Recipe {
   imageSource?: string;
   serves: number;
   time: string;
+  tags: string; // JSON string
 }

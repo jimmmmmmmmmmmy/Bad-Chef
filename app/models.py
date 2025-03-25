@@ -2,6 +2,7 @@ from sqlmodel import SQLModel, Field
 from typing import Optional
 from datetime import datetime
 import datetime as dt
+from typing import List
 
 class User(SQLModel, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
@@ -29,10 +30,11 @@ class Recipe(SQLModel, table=True):
     instructions: str
     author_id: int = Field(foreign_key="user.id")
     created_at: datetime = Field(default_factory=lambda: datetime.now(dt.UTC))
-    imageSource: str
+    image_source: str
     category: str
     serves: int = 1 # Default if no serving size
     time: str
+    tags: str # Stored as a JSON string
 
 class RecipeCreate(SQLModel):
     """Input model for creating a recipe."""
@@ -42,8 +44,10 @@ class RecipeCreate(SQLModel):
     instructions: str
     serves: int = 1
     time: str
-    imageSource: str
+    image_source: str
     category: str
+    # At create it's a list but becomes a JSON string at endpoint
+    tags: List[str]
 
 class RecipeRead(Recipe):
     """Response model including auto-generated fields for id & created_at"""
@@ -80,6 +84,6 @@ class FavoriteReadDetailed(Favorite):
     title: str
     author_id: int
     category: str # LOOOOOL forgot to pass this to frontend LMAOOOO
-    imageSource: str
+    image_source: str
     time: str
     serves: int

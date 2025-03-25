@@ -22,13 +22,16 @@ def create_db_and_tables(db_engine: Engine = engine):
             # Insert each recipe from the JSON file
             for recipe_data in recipes_data:
                 # Map JSON fields to Recipe model
-                # Convert ingredients list to a string (or adjust based on your model)
+                # Convert ingredients list to a string
                 ingredients_str = ", ".join(
                     f"{ing['amount']} {ing['unit']} {ing['id']}"+"\n" 
                     for ing in recipe_data["ingredients"]
                 )
-                # Convert instructions list to a string (or adjust based on your model)
+                # Convert instructions list to a string
                 instructions_str = "\n".join(recipe_data["instructions"])
+
+                # Store tags as JSON string
+                tags_json = json.dumps(recipe_data.get("tags", []))
                 
                 sample_recipe = Recipe(
                     title=recipe_data["title"],
@@ -36,10 +39,11 @@ def create_db_and_tables(db_engine: Engine = engine):
                     ingredients=ingredients_str,
                     instructions=instructions_str,
                     author_id=randint(1, 10),
-                    category=recipe_data.get("category", ""), # Added category field
-                    imageSource=recipe_data["imageSource"],
+                    category=recipe_data.get("category", ""),
+                    image_source=recipe_data["image_source"],
                     serves=recipe_data["serves"],
-                    time=recipe_data["time"]
+                    time=recipe_data["time"],
+                    tags=tags_json
                 )
                 session.add(sample_recipe)
             
