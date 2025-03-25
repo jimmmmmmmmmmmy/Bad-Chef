@@ -10,7 +10,7 @@ from typing import Optional
 import os
 from dotenv import load_dotenv
 
-# Load environment variables
+# Needs to link to .env if in root
 load_dotenv("../.env")
 
 SECRET_KEY = os.getenv("SECRET_KEY") # JWT signing from .env

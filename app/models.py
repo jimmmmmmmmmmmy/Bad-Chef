@@ -42,7 +42,8 @@ class RecipeCreate(SQLModel):
     instructions: str
     serves: int = 1
     time: str
-    # Removed author_id as we're passing it in the post
+    imageSource: str
+    category: str
 
 class RecipeRead(Recipe):
     """Response model including auto-generated fields for id & created_at"""
@@ -76,8 +77,6 @@ class FavoriteRead(Favorite):
     pass
 
 class FavoriteReadDetailed(Favorite):
-    id: int
-    recipe_id: int
     title: str
     author_id: int
     category: str # LOOOOOL forgot to pass this to frontend LMAOOOO

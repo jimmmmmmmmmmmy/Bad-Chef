@@ -4,7 +4,7 @@ How to set up and run this locally
 
 1)	Install Poetry via Homebrew	`brew install poetry`
 2)	Install backend dependencies `cd app; poetry install`
-3)	Create root `.env` file in `/frontend`and add VITE_BACKEND_URL, VITE_FRONTEND_URL 
+3)	Create an `.env` file in `/frontend`and add VITE_BACKEND_URL, VITE_FRONTEND_URL 
 
 ```
 VITE_BACKEND_URL=http://localhost:8000   
