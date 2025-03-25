@@ -12,7 +12,7 @@ function Recipes() {
   const [error, setError] = useState<string | null>(null);
   const [activeFilter, setActiveFilter] = useState<string>("All");
   const navigate = useNavigate();
-  const BACKEND_URL = "http://192.168.1.203:8000";
+  const BACKEND_URL = `${import.meta.env.VITE_BACKEND_URL}`;
 
   useEffect(() => {
     const token = localStorage.getItem("token");

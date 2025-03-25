@@ -11,7 +11,8 @@ function Favorites() {
   const [loading, setLoading] = useState(true);
   const [activeFilter, setActiveFilter] = useState<string>("All");
   const navigate = useNavigate();
-  const API_BASE_URL = `http://192.168.1.203:8000/favorites`; // Use .env
+  const API_BASE_URL = `${import.meta.env.VITE_BACKEND_URL}/favorites`;
+  //const API_BASE_URL = `http://192.168.1.203:8000/favorites`;
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -25,6 +26,9 @@ function Favorites() {
         const response = await axios.get(`${API_BASE_URL}/all`, {
           headers: { Authorization: `Bearer ${token}` },
         });
+        console.log(`${API_BASE_URL}/all)`);
+        console.log("response.data:", response.data)
+        
         const favoriteRecipes = response.data.map((fav: any) => ({
           id: fav.recipe_id,
           title: fav.title,

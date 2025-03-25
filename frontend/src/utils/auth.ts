@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const BACKEND_URL = "http://192.168.1.203:8000";
+const BACKEND_URL = `${import.meta.env.VITE_BACKEND_URL}`;
 console.log("auth.ts BACKEND_URL:", BACKEND_URL); 
 
 export async function validateToken(token: string): Promise<boolean> {

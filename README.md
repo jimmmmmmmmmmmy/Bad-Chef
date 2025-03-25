@@ -4,12 +4,17 @@ How to set up and run this locally
 
 1)	Install Poetry via Homebrew	`brew install poetry`
 2)	Install backend dependencies `cd app; poetry install`
-3)	Create root `.env` file and add SECRET_KEY, BACKEND_URL, FRONTEND_URL 
+3)	Create root `.env` file in `/frontend`and add VITE_BACKEND_URL, VITE_FRONTEND_URL 
+
+```
+VITE_BACKEND_URL=http://localhost:8000   
+VITE_FRONTEND_URL=http://localhost:5173  
+```
+
+Create root `.env` file and add a secret key:
 
 ```
 SECRET_KEY=<your-random-hex-string>  # Generate via `openssl rand -hex 32`
-BACKEND_URL=http://localhost:8000   
-FRONTEND_URL=http://localhost:5173  
 ```
 
 4)	Install frontend dependencies	`cd frontend; npm install`

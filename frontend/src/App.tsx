@@ -10,7 +10,7 @@ function LoginSignup() {
   const [isSignup, setIsSignup] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
-  const API_BASE_URL = "http://192.168.1.203:8000";
+  const API_BASE_URL = `${import.meta.env.VITE_BACKEND_URL}`;
   console.log("API_BASE_URL:", API_BASE_URL);  // Log URL on render
 
   const handleSubmit = async () => {
