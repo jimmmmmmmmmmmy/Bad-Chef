@@ -26,7 +26,7 @@
       ],
       "image_source": "../assets/spaghetti_meatballs.png",
       "category": "Dinner",
-      "tags": ["spicy", "ramen", "umami"]
+      "tags": ["Italian", "pasta", "meat", "savory", "dinner", "juicy", "tangy", "classic"]
     },
     {
       "id": "2",
@@ -51,7 +51,8 @@
         "Season with salt, pepper, and red pepper flakes if desired."
       ],
       "image_source": "../assets/avocado_toast.png",
-      "category": "Breakfast"
+      "category": "Breakfast",
+      "tags": ["breakfast", "healthy", "vegetarian", "simple", "savory", "creamy", "protein", "quick"]
     },
     {
       "id": "3",
@@ -78,7 +79,8 @@
         "Serve hot, optionally over rice."
       ],
       "image_source": "../assets/chicken_stirfry.png",
-      "category": "Dinner"
+      "category": "Dinner",
+      "tags": ["Asian", "chicken", "vegetables", "quick", "dinner", "healthy", "lean", "crisp"]
     },
     {
       "id": "4",
@@ -105,7 +107,8 @@
         "Serve immediately."
       ],
       "image_source": "../assets/bruschetta.png",
-      "category": "Appetizer"
+      "category": "Appetizer",
+      "tags": ["Italian", "appetizer", "vegetarian", "fresh", "savory", "crisp", "herbs", "light"]
     },
     {
       "id": "5",
@@ -133,7 +136,8 @@
         "Serve with crackers or bread for dipping."
       ],
       "image_source": "../assets/spinach_artichoke_dip.png",
-      "category": "Appetizer"
+      "category": "Appetizer",
+      "tags" : ["appetizer", "creamy", "cheesy", "vegetarian", "party", "rich", "warm", "dip"]
     },
     {
       "id": "6",
@@ -160,7 +164,8 @@
         "Roll up burritos and serve hot."
       ],
       "image_source": "../assets/breakfast_burrito.png",
-      "category": "Breakfast"
+      "category": "Breakfast",
+      "tags": ["breakfast", "savory", "meat", "eggs", "wrap", "hearty", "cheesy", "quick"]
     },
     {
       "id": "7",
@@ -185,7 +190,8 @@
         "Sprinkle with fresh ground black pepper and serve."
       ],
       "image_source": "../assets/caesar_salad.png",
-      "category": "Lunch"
+      "category": "Lunch",
+      "tags": ["lunch", "salad", "crisp", "savory", "simple", "tangy", "light", "classic"]
     },
     {
       "id": "8",
@@ -213,6 +219,37 @@
         "Assemble sandwich with chicken, lettuce, sliced tomato, and red onion."
       ],
       "image_source": "../assets/grilled_chicken_sandwich.png",
-      "category": "Lunch"
+      "category": "Lunch",
+      "tags": ["lunch", "chicken", "sandwich", "savory", "quick", "grilled", "fresh", "hearty"]
+    },
+    {
+      "id": "9",
+      "title": "Vegetarian Quinoa Bowl",
+      "time": "20 Mins",
+      "serves": 2,
+      "creator": "Healthy Eats Guru",
+      "ingredients": [
+        {"id": "quinoa", "amount": 1, "unit": "cup"},
+        {"id": "black_beans", "amount": 1, "unit": "can"},
+        {"id": "avocado", "amount": 1, "unit": "piece"},
+        {"id": "corn", "amount": 0.5, "unit": "cup"},
+        {"id": "lime", "amount": 1, "unit": "piece"},
+        {"id": "cilantro", "amount": 0.25, "unit": "cup"},
+        {"id": "olive_oil", "amount": 1, "unit": "tbsp"},
+        {"id": "salt", "amount": 1, "unit": "to taste"},
+        {"id": "pepper", "amount": 1, "unit": "to taste"}
+      ],
+      "description": "A vibrant, protein-packed vegetarian bowl with zesty lime and fresh flavors.",
+      "instructions": [
+        "Cook quinoa according to package instructions.",
+        "Drain and rinse black beans, then heat in a pan.",
+        "Mix cooked quinoa, black beans, corn, and chopped cilantro in a bowl.",
+        "Drizzle with olive oil and juice from the lime.",
+        "Top with sliced avocado, season with salt and pepper, and serve."
+      ],
+      "image_source": "../assets/quinoa_bowl.png",
+      "category": "Lunch",
+      "tags": ["lunch", "vegetarian", "healthy", "quinoa", "fresh", "zesty", "protein", "quick"]
     }
-  ]
+
+]
