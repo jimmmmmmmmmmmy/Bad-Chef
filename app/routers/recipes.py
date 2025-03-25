@@ -21,6 +21,7 @@ async def create_recipe(recipe: RecipeCreate, session: Session = Depends(get_ses
         recipe_dict = recipe.model_dump()
          # Convert List[str] to str, in the actual frontend it's all strings now
         recipe_dict["tags"] = json.dumps(recipe_dict["tags"]) 
+        recipe_dict["instructions"] = json.dumps(recipe_dict["instructions"]) 
         recipe_dict["author_id"] = current_user.id
         db_recipe = Recipe(**recipe_dict)
         session.add(db_recipe)

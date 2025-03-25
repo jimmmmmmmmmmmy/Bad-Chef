@@ -41,7 +41,7 @@ class RecipeCreate(SQLModel):
     title: str
     description: str
     ingredients: str
-    instructions: str
+    instructions: List[str]
     serves: int = 1
     time: str
     image_source: str

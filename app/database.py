@@ -27,17 +27,15 @@ def create_db_and_tables(db_engine: Engine = engine):
                     f"{ing['amount']} {ing['unit']} {ing['id']}"+"\n" 
                     for ing in recipe_data["ingredients"]
                 )
-                # Convert instructions list to a string
-                instructions_str = "\n".join(recipe_data["instructions"])
-
-                # Store tags as JSON string
+                # Serialize Python objects into strong w/ JSON syntax
                 tags_json = json.dumps(recipe_data.get("tags", []))
+                instructions_json = json.dumps(recipe_data.get("instructions", []))
                 
                 sample_recipe = Recipe(
                     title=recipe_data["title"],
                     description=recipe_data["description"],
                     ingredients=ingredients_str,
-                    instructions=instructions_str,
+                    instructions=instructions_json,
                     author_id=randint(1, 10),
                     category=recipe_data.get("category", ""),
                     image_source=recipe_data["image_source"],
