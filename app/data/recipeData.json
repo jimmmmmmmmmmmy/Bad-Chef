@@ -17,13 +17,15 @@
         {"id": "pepper", "amount": 1, "unit": "to taste"}
       ],
       "description": "Classic Italian comfort food with juicy meatballs and tangy tomato sauce.",
-      "instructions": [
+      "instructions": {
+        "Steps" : [
         "Cook spaghetti according to package instructions.",
         "Mix ground beef, breadcrumbs, egg, and garlic. Form into meatballs.",
         "Brown meatballs in a pan, then add tomato sauce and oregano.",
         "Simmer for 20 minutes.",
         "Serve meatballs and sauce over spaghetti."
-      ],
+      ]
+    },
       "image_source": "../assets/spaghetti_meatballs.png",
       "category": "Dinner",
       "tags": ["Italian", "pasta", "meat", "savory", "dinner", "juicy", "tangy", "classic"]
@@ -43,13 +45,15 @@
         {"id": "red_pepper_flakes", "amount": 1, "unit": "to taste"}
       ],
       "description": "Simple and nutritious breakfast favorite with creamy avocado and protein-rich eggs.",
-      "instructions": [
+      "instructions": {
+        "Steps" : [
         "Toast the bread slices.",
         "Mash the avocado and spread on toast.",
         "Fry or poach eggs to your liking.",
         "Place eggs on avocado toast.",
         "Season with salt, pepper, and red pepper flakes if desired."
-      ],
+      ]
+    },
       "image_source": "../assets/avocado_toast.png",
       "category": "Breakfast",
       "tags": ["breakfast", "healthy", "vegetarian", "simple", "savory", "creamy", "protein", "quick"]
@@ -71,13 +75,15 @@
         {"id": "garlic", "amount": 2, "unit": "clove"}
       ],
       "description": "A quick and healthy Asian-inspired dish packed with vegetables and lean protein.",
-      "instructions": [
+      "instructions": {
+        "Steps" : [
         "Heat oils in a wok or large pan.",
         "Stir fry chicken until cooked through, then set aside.",
         "Stir fry vegetables and garlic until crisp-tender.",
         "Return chicken to pan, add soy sauce, and stir to combine.",
         "Serve hot, optionally over rice."
-      ],
+      ]
+      },
       "image_source": "../assets/chicken_stirfry.png",
       "category": "Dinner",
       "tags": ["Asian", "chicken", "vegetables", "quick", "dinner", "healthy", "lean", "crisp"]
@@ -99,13 +105,15 @@
         {"id": "pepper", "amount": 1, "unit": "to taste"}
       ],
       "description": "A classic Italian appetizer featuring fresh tomatoes and herbs on crispy bread.",
-      "instructions": [
+      "instructions": {
+        "Steps" : [
         "Slice baguette and toast until crispy.",
         "Dice tomatoes and mix with minced garlic, chopped basil, olive oil, and balsamic vinegar.",
         "Season the tomato mixture with salt and pepper.",
         "Top each bread slice with the tomato mixture.",
         "Serve immediately."
-      ],
+      ]
+      },
       "image_source": "../assets/bruschetta.png",
       "category": "Appetizer",
       "tags": ["Italian", "appetizer", "vegetarian", "fresh", "savory", "crisp", "herbs", "light"]
@@ -128,13 +136,15 @@
         {"id": "pepper", "amount": 1, "unit": "to taste"}
       ],
       "description": "A creamy, cheesy dip perfect for parties or game day snacking.",
-      "instructions": [
+      "instructions": {
+        "Steps" : [
         "Preheat oven to 350°F (175°C).",
         "Mix all ingredients in a large bowl.",
         "Transfer mixture to a baking dish.",
         "Bake for 20-25 minutes until hot and bubbly.",
         "Serve with crackers or bread for dipping."
-      ],
+      ]
+      },
       "image_source": "../assets/spinach_artichoke_dip.png",
       "category": "Appetizer",
       "tags" : ["appetizer", "creamy", "cheesy", "vegetarian", "party", "rich", "warm", "dip"]
@@ -156,13 +166,15 @@
         {"id": "pepper", "amount": 1, "unit": "to taste"}
       ],
       "description": "A hearty breakfast wrap filled with scrambled eggs, bacon, and vegetables.",
-      "instructions": [
+      "instructions": {
+        "Steps" : [
         "Cook bacon until crispy, then crumble.",
         "Sauté diced bell pepper and onion until soft.",
         "Scramble eggs with salt and pepper.",
         "Warm tortillas and fill with eggs, bacon, vegetables, and cheese.",
         "Roll up burritos and serve hot."
-      ],
+      ]
+    },
       "image_source": "../assets/breakfast_burrito.png",
       "category": "Breakfast",
       "tags": ["breakfast", "savory", "meat", "eggs", "wrap", "hearty", "cheesy", "quick"]
@@ -182,13 +194,15 @@
         {"id": "black_pepper", "amount": 1, "unit": "to taste"}
       ],
       "description": "A classic Caesar salad with crisp romaine lettuce and tangy dressing.",
-      "instructions": [
+      "instructions": {
+        "Steps" : [
         "Wash and chop romaine lettuce.",
         "In a large bowl, toss lettuce with Caesar dressing and lemon juice.",
         "Add croutons and grated Parmesan cheese.",
         "Toss again to combine all ingredients.",
         "Sprinkle with fresh ground black pepper and serve."
-      ],
+        ]
+      },
       "image_source": "../assets/caesar_salad.png",
       "category": "Lunch",
       "tags": ["lunch", "salad", "crisp", "savory", "simple", "tangy", "light", "classic"]
@@ -211,13 +225,15 @@
         {"id": "pepper", "amount": 1, "unit": "to taste"}
       ],
       "description": "A delicious grilled chicken sandwich perfect for a quick lunch.",
-      "instructions": [
-        "Season chicken breasts with salt and pepper.",
-        "Grill chicken until fully cooked.",
-        "Toast burger buns lightly.",
-        "Spread mayonnaise and mustard on buns.",
-        "Assemble sandwich with chicken, lettuce, sliced tomato, and red onion."
-      ],
+      "instructions": {
+        "Steps" : [
+          "Season chicken breasts with salt and pepper.",
+          "Grill chicken until fully cooked.",
+          "Toast burger buns lightly.",
+          "Spread mayonnaise and mustard on buns.",
+          "Assemble sandwich with chicken, lettuce, sliced tomato, and red onion."
+        ]
+      },
       "image_source": "../assets/grilled_chicken_sandwich.png",
       "category": "Lunch",
       "tags": ["lunch", "chicken", "sandwich", "savory", "quick", "grilled", "fresh", "hearty"]
@@ -240,16 +256,87 @@
         {"id": "pepper", "amount": 1, "unit": "to taste"}
       ],
       "description": "A vibrant, protein-packed vegetarian bowl with zesty lime and fresh flavors.",
-      "instructions": [
+      "instructions": {
+        "Steps" : [
         "Cook quinoa according to package instructions.",
         "Drain and rinse black beans, then heat in a pan.",
         "Mix cooked quinoa, black beans, corn, and chopped cilantro in a bowl.",
         "Drizzle with olive oil and juice from the lime.",
         "Top with sliced avocado, season with salt and pepper, and serve."
-      ],
+      ]
+    },
       "image_source": "../assets/quinoa_bowl.png",
       "category": "Lunch",
       "tags": ["lunch", "vegetarian", "healthy", "quinoa", "fresh", "zesty", "protein", "quick"]
-    }
-
+    },
+    {
+      "title": "Braised Pork Belly (Hong Shao Rou/红烧肉), an Easy Version",
+      "time": "1 hour 20 minutes",
+      "serves": 4,
+      "creator": "Wei Guo @ Red House Spice",
+      "ingredients": [
+          {
+              "id": "pork belly",
+              "amount": 600,
+              "unit": "g"
+          },
+          {
+              "id": "Shaoxing rice wine",
+              "amount": 250,
+              "unit": "ml"
+          },
+          {
+              "id": "light soy sauce",
+              "amount": 2,
+              "unit": "tablespoon"
+          },
+          {
+              "id": "dark soy sauce",
+              "amount": 1,
+              "unit": "tablespoon"
+          },
+          {
+              "id": "ginger",
+              "amount": 5,
+              "unit": "slices"
+          },
+          {
+              "id": "star-anise",
+              "amount": 2,
+              "unit": "star"
+          },
+          {
+              "id": "bay leaf",
+              "amount": 2,
+              "unit": "leaf"
+          },
+          {
+              "id": "rock sugar",
+              "amount": 20,
+              "unit": "g"
+          }
+      ],
+      "description": "Tender, gelatinous and aromatic, Chinese red braised pork belly is scrumptious and comforting.",
+      "instructions": {
+          "Steps": [
+              "Blanch the pork",
+              "Cut pork belly into 2-3 cm chunks (about 1 inch). Put into a pot then fill with cold water. Boil over high heat.",
+              "Once it starts boiling, you’ll see froth appearing on the surface. Skim it off with a spoon.",
+              "Drain the meat in a colander then rinse under running water.",
+              "Braise the pork",
+              "Put the pork into a clean pot (ideally, a small one, see note 3). Pour in Shaoxing rice wine and hot water (barely covering the meat). Add light soy sauce, dark soy sauce, ginger, star anise and bay leaves.",
+              "Bring the liquid to a full boil. Cover with a lid and leave to simmer over low heat for 1-1.5 hour until the meat is fork-tender (During the process stir the meat around a few times).",
+              "Thicken the broth",
+              "Uncover the pot. Add sugar then turn the heat to the highest. Leave to boil fiercely (Stir from time to time) until the broth reduces to just enough to cover the bottom of the pot.",
+              "Serve immediately with plain steamed rice and vegetable dishes of your choice."
+          ]
+      },
+      "image_source": "../assets/braised_pork_belly.png",
+      "category": "Main Course",
+      "tags": [
+          "Chinese",
+          "pork",
+          "comfort food"
+      ]
+  }
 ]

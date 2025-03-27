@@ -2,7 +2,7 @@ from sqlmodel import SQLModel, Field
 from typing import Optional
 from datetime import datetime
 import datetime as dt
-from typing import List
+from typing import Optional, Dict, List
 
 class User(SQLModel, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
@@ -26,8 +26,8 @@ class Recipe(SQLModel, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
     title: str = Field(index=True)
     description: str 
-    ingredients: str # Potentially use JSON later
-    instructions: str
+    ingredients: str
+    instructions: str # Stored as JSON string representing a dictionary
     author_id: int = Field(foreign_key="user.id")
     created_at: datetime = Field(default_factory=lambda: datetime.now(dt.UTC))
     image_source: str
@@ -41,7 +41,8 @@ class RecipeCreate(SQLModel):
     title: str
     description: str
     ingredients: str
-    instructions: List[str]
+    #Change to sectioned instructions {"Steak: ["Step 1", "Step 2"], etc"}
+    instructions: Dict[str, List[str]]
     serves: int = 1
     time: str
     image_source: str

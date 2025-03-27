@@ -33,8 +33,9 @@ function RecipeDetail() {
 
   // Split ingredients into an array for rendering as a list
   const ingredientsList = recipe.ingredients ? recipe.ingredients.split(", ") : [];
-  // Parse JSON string back into an array
-  const instructionsList = recipe.instructions ? JSON.parse(recipe.instructions) : [];
+  // Parse JSON string back into an object for instructions
+  const instructionsList = recipe.instructions ? JSON.parse(recipe.instructions) : {};
+  // Parse JSON string back into an array for tags
   const tagsList = recipe.tags ? JSON.parse(recipe.tags) : [];
 
   // Format each ingredient to capitalize the item name (e.g., chicken_breast -> Chicken Breast)
@@ -97,11 +98,16 @@ function RecipeDetail() {
       </section>
       <section className="recipe-section">
         <h2>Instructions</h2>
-        <ol className="recipe-list">
-          {instructionsList.map((instruction: string, index: number) => (
-            <li key={index}>{instruction}</li>
-          ))}
-        </ol>
+        {Object.entries(instructionsList).map(([section, steps]) => (
+          <div key={section} className="instruction-section">
+            <h3>{section}</h3>
+            <ol className="recipe-list">
+              {steps.map((step: string, index: number) => (
+                <li key={index}>{step}</li>
+              ))}
+            </ol>
+          </div>
+        ))}
       </section>
       <section className="recipe-section">
           <h2>Tags</h2>

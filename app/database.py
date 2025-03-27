@@ -3,6 +3,10 @@ from sqlmodel import SQLModel, create_engine, Session, select
 from sqlalchemy.engine import Engine
 from app.models import Recipe
 from random import randint
+import logging
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 # using SQLite for now, echo=True for debugging
 DATABASE_URL = "sqlite:///recipes.db"
@@ -29,7 +33,8 @@ def create_db_and_tables(db_engine: Engine = engine):
                 )
                 # Serialize Python objects into strong w/ JSON syntax
                 tags_json = json.dumps(recipe_data.get("tags", []))
-                instructions_json = json.dumps(recipe_data.get("instructions", []))
+                # Instead of a flat list, the instructions are now a sectioned dictionary, grab everything
+                instructions_json = json.dumps(recipe_data["instructions"])
                 
                 sample_recipe = Recipe(
                     title=recipe_data["title"],
@@ -43,6 +48,7 @@ def create_db_and_tables(db_engine: Engine = engine):
                     time=recipe_data["time"],
                     tags=tags_json
                 )
+                logger.info(f"{sample_recipe}")
                 session.add(sample_recipe)
             
             session.commit()

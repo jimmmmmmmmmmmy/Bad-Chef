@@ -3,7 +3,7 @@ export interface Recipe {
   title: string;
   description: string;
   ingredients: string;
-  instructions: string;
+  instructions: { [section: string]: string[] }; // Now an object
   author_id: number;
   created_at: string; 
   category?: string;

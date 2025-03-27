@@ -33,6 +33,30 @@ async def create_recipe(recipe: RecipeCreate, session: Session = Depends(get_ses
         logger.error(f"Error creating recipe: {str(e)}")
         raise HTTPException(status_code=500, detail=f"Failed to create recipe: {str(e)}")
     
+@router.post("/scraped/", response_model=RecipeRead)
+async def create_scraped_recipe(recipe: dict, session: Session = Depends(get_session), current_user: User = Depends(get_current_user)
+    ):
+    """Insert a recipe from preprocessed scraped data"""
+    logger.info(f"Creating scraped recipe for {current_user.username}")
+    try:
+        required_fields = {required_fields == {"title", "description", "ingredients", "instructions", "serves", "time", "category", "image_source", "tags"}}
+        if not all(field in recipe for field in required_fields):
+                missing = required_fields - set(recipe.keys())
+                raise HTTPException(status_code=400, detail=f"Missing required fields: {missing}")
+
+        recipe["author_id"] = current_user.id
+
+        db_recipe = Recipe(**recipe)
+        session.add(db_recipe)
+        session.commit()
+        session.refresh(db_recipe)
+        logger.info(f"Recipe created: {db_recipe.id}")
+        return db_recipe
+    except Exception as e:
+        logger.error(f"Error creating scraped recipe: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Failed to create scraped recipe: {str(e)}")
+
+
 @router.get("/", response_model=List[RecipeRead])
 async def get_recipes(session: Session = Depends(get_session)):
     """Retrieve all recipes from database."""
