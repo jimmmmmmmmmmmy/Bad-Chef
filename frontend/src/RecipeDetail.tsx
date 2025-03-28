@@ -34,26 +34,59 @@ function RecipeDetail() {
   // Split ingredients into an array for rendering as a list
   const ingredientsList = recipe.ingredients ? recipe.ingredients.split(", ") : [];
   // Parse JSON string back into an array
-  const instructionsList = recipe.instructions ? JSON.parse(recipe.instructions) : [];
+  const instructionsList = recipe.instructions
+    ? (JSON.parse(recipe.instructions)?.Steps || [])
+    : [];
   const tagsList = recipe.tags ? JSON.parse(recipe.tags) : [];
 
-  // Format each ingredient to capitalize the item name (e.g., chicken_breast -> Chicken Breast)
   const formatIngredient = (ingredient: string) => {
-    // Split into amount, unit, and item (e.g., "2 piece chicken_breast")
+    // Split into amount, unit, and item (e.g., "100 to 150 ml (3.5 to 5.27 fl oz) white_vermouth")
     const parts = ingredient.split(" ");
     if (parts.length < 3) return ingredient; // Fallback if format is unexpected
-
-    const amount = parts[0]; // e.g., "2"
-    const unit = parts[1]; // e.g., "piece"
-    const item = parts.slice(2).join(" ").replace("_", " "); // e.g., "chicken breast"
-
-    // Capitalize each word in the item name
+  
+    const amount = parts[0]; // e.g., "100"
+    // Units to keep lowercase
+    const lowercaseUnits = ["ml", "fl", "oz", "g", "to", "kg"];
+    // Find where the unit ends and item begins by checking for lowercase units
+    let unitEndIndex = 1;
+    let unitParts = [parts[1]];
+    for (let i = 2; i < parts.length; i++) {
+      if (lowercaseUnits.includes(parts[i].toLowerCase()) || parts[i].includes("(") || parts[i].includes(")")) {
+        unitParts.push(parts[i]);
+        unitEndIndex = i;
+      } else {
+        break;
+      }
+    }
+    const unit = unitParts.join(" "); // e.g., "to 150 ml (3.5 to 5.27 fl oz)"
+    const item = parts.slice(unitEndIndex + 1).join(" ").replace("_", " "); // e.g., "white vermouth"
+  
+    // Capitalize each word in the item name, no exceptions for item
     const formattedItem = item
       .split(" ")
       .map(word => word.charAt(0).toUpperCase() + word.slice(1))
       .join(" ");
+  
+    // Reconstruct the unit, keeping specified words lowercase
+    const formattedUnit = unit
+      .split(" ")
+      .map(word => {
+        const cleanWord = word.replace(/[()]/g, ""); // Remove parentheses for checking
+        return lowercaseUnits.includes(cleanWord.toLowerCase())
+          ? cleanWord.toLowerCase()
+          : word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
+      })
+      .join(" ")
+      .replace(/(\d+)/g, "$1"); // Ensure numbers aren't altered
+  
+    return `${amount} ${formattedUnit} ${formattedItem}`; // e.g., "100 to 150 ml (3.5 to 5.27 fl oz) White Vermouth"
+  };
 
-    return `${amount} ${unit} ${formattedItem}`; // e.g., "2 piece Chicken Breast"
+  const formatTitle = (title: string) => {
+    return title
+      .split(" ")
+      .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+      .join(" ");
   };
 
   return (
@@ -76,7 +109,7 @@ function RecipeDetail() {
 
 
     <div className="recipe-detail-container">
-      <h1 className="recipe-title-full">{recipe.title}</h1>
+      <h1 className="recipe-title-full">{formatTitle(recipe.title)}</h1> 
       <section className="recipe-section">
         <h2>Description</h2>
         <p>{recipe.description}</p>
@@ -103,7 +136,7 @@ function RecipeDetail() {
           ))}
         </ol>
       </section>
-      <section className="recipe-section">
+      {/* <section className="recipe-section">
           <h2>Tags</h2>
           <ul className="recipe-list">
             {tagsList.map((tag: string, index: number) => (
@@ -111,6 +144,7 @@ function RecipeDetail() {
             ))}
           </ul>
         </section>
+        */}
       {/* <section className="recipe-section">
       <h2>Details</h2>
         <p>

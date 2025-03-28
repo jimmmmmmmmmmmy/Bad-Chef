@@ -11,6 +11,13 @@ interface ScrollableRecipeListProps {
   onUnlike?: (recipeId: number) => void;
 }
 
+const formatTitle = (title: string) => {
+  return title
+    .split(" ")
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+    .join(" ");
+};
+
 const ScrollableRecipeList: React.FC<ScrollableRecipeListProps> = ({
   recipes,
   onUnlike,
@@ -109,7 +116,7 @@ const ScrollableRecipeList: React.FC<ScrollableRecipeListProps> = ({
         >
           <RecipeCard
             image_source={item.image_source || "assets/bruschetta.png"}
-            title={item.title}
+            title={formatTitle(item.title)}
             creator={`by ${item.author_id || "Unknown"}`}
             onClick={() => handleRecipePress(item)}
           />

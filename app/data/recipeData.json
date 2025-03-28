@@ -1,5 +1,7 @@
-[
+{
+  "recipes": [
     {
+      "recipe": {
       "id": "1",
       "title": "Spaghetti and Meatballs",
       "time": "30 Mins",
@@ -27,8 +29,8 @@
       "image_source": "../assets/spaghetti_meatballs.png",
       "category": "Dinner",
       "tags": ["Italian", "pasta", "meat", "savory", "dinner", "juicy", "tangy", "classic"]
-    },
-    {
+    }},
+    {"recipe": {
       "id": "2",
       "title": "Avocado Toast",
       "time": "10 Mins",
@@ -53,8 +55,8 @@
       "image_source": "../assets/avocado_toast.png",
       "category": "Breakfast",
       "tags": ["breakfast", "healthy", "vegetarian", "simple", "savory", "creamy", "protein", "quick"]
-    },
-    {
+    }},
+    {"recipe": {
       "id": "3",
       "title": "Chicken Stir Fry",
       "time": "25 Mins",
@@ -81,8 +83,8 @@
       "image_source": "../assets/chicken_stirfry.png",
       "category": "Dinner",
       "tags": ["Asian", "chicken", "vegetables", "quick", "dinner", "healthy", "lean", "crisp"]
-    },
-    {
+    }},
+    {"recipe": {
       "id": "4",
       "title": "Bruschetta",
       "time": "15 Mins",
@@ -109,8 +111,8 @@
       "image_source": "../assets/bruschetta.png",
       "category": "Appetizer",
       "tags": ["Italian", "appetizer", "vegetarian", "fresh", "savory", "crisp", "herbs", "light"]
-    },
-    {
+    }},
+    {"recipe": {
       "id": "5",
       "title": "Spinach and Artichoke Dip",
       "time": "30 Mins",
@@ -138,8 +140,8 @@
       "image_source": "../assets/spinach_artichoke_dip.png",
       "category": "Appetizer",
       "tags" : ["appetizer", "creamy", "cheesy", "vegetarian", "party", "rich", "warm", "dip"]
-    },
-    {
+    }},
+    {"recipe": {
       "id": "6",
       "title": "Breakfast Burrito",
       "time": "20 Mins",
@@ -166,8 +168,8 @@
       "image_source": "../assets/breakfast_burrito.png",
       "category": "Breakfast",
       "tags": ["breakfast", "savory", "meat", "eggs", "wrap", "hearty", "cheesy", "quick"]
-    },
-    {
+    }},
+    {"recipe": {
       "id": "7",
       "title": "Caesar Salad",
       "time": "15 Mins",
@@ -192,8 +194,8 @@
       "image_source": "../assets/caesar_salad.png",
       "category": "Lunch",
       "tags": ["lunch", "salad", "crisp", "savory", "simple", "tangy", "light", "classic"]
-    },
-    {
+    }},
+    {"recipe": {
       "id": "8",
       "title": "Grilled Chicken Sandwich",
       "time": "25 Mins",
@@ -221,8 +223,8 @@
       "image_source": "../assets/grilled_chicken_sandwich.png",
       "category": "Lunch",
       "tags": ["lunch", "chicken", "sandwich", "savory", "quick", "grilled", "fresh", "hearty"]
-    },
-    {
+    }},
+    {"recipe": {
       "id": "9",
       "title": "Vegetarian Quinoa Bowl",
       "time": "20 Mins",
@@ -250,6 +252,6 @@
       "image_source": "../assets/quinoa_bowl.png",
       "category": "Lunch",
       "tags": ["lunch", "vegetarian", "healthy", "quinoa", "fresh", "zesty", "protein", "quick"]
-    }
-
-]
+    }}
+  ]
+}

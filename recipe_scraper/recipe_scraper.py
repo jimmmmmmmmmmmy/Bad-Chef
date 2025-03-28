@@ -163,9 +163,7 @@ def ollama_parse(text: str, url: str):
     
 if __name__ == "__main__":
     urls = [
-        # "https://www.justonecookbook.com/bamboo-rice-takenoko-gohan/",
-        "https://redhousespice.com/red-cooked-pork-belly/",
-        # "https://www.thefrenchcookingacademy.com/recipes/sauce-entrecote"
+        #
     ]
     for url in urls:
             logger.info(f"trying url at {url}")

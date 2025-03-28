@@ -3,10 +3,15 @@ from sqlmodel import SQLModel, create_engine, Session, select
 from sqlalchemy.engine import Engine
 from app.models import Recipe
 from random import randint
+import logging
 
 # using SQLite for now, echo=True for debugging
 DATABASE_URL = "sqlite:///recipes.db"
 engine = create_engine(DATABASE_URL, echo=True)
+
+# Configure logging
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+logger = logging.getLogger(__name__)
 
 def create_db_and_tables(db_engine: Engine = engine):
     """Creates all DB tables defined in models and seeds initial data if empty."""
@@ -16,12 +21,17 @@ def create_db_and_tables(db_engine: Engine = engine):
         recipe_count = session.exec(select(Recipe)).all()
         if not recipe_count:  # If empty, seed data
             # Load the JSON file
-            with open("./data/recipeData.json", "r") as file:
+            # with open("./data/recipeData.json", "r") as file:
+            with open("./data/frenchcookingacademy.json", "r") as file:
                 recipes_data = json.load(file)
+            
+            # Add this for other Ollama parsed JSON files
+            recipe_list = recipes_data["recipes"]
 
             # Insert each recipe from the JSON file
-            for recipe_data in recipes_data:
+            for recipe_entry in recipe_list:
                 # Map JSON fields to Recipe model
+                recipe_data = recipe_entry["recipe"] 
                 # Convert ingredients list to a string
                 ingredients_str = ", ".join(
                     f"{ing['amount']} {ing['unit']} {ing['id']}"+"\n" 
