@@ -11,7 +11,7 @@ import os
 from dotenv import load_dotenv
 
 # Needs to link to .env if in root
-load_dotenv("../.env")
+load_dotenv()
 
 SECRET_KEY = os.getenv("SECRET_KEY") # JWT signing from .env
 ALGORITHM = "HS256"

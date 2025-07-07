@@ -13,8 +13,9 @@ import logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-load_dotenv("../frontend/.env")
+load_dotenv()
 FRONTEND_URL = os.getenv("VITE_FRONTEND_URL")
+logger.info(f"FRONTEND_URL: {FRONTEND_URL}") # Add this line to check the loaded URL
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -26,7 +27,7 @@ app = FastAPI(lifespan=lifespan)
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[FRONTEND_URL],
+    allow_origins=["*"],  # Temporarily allow all origins for debugging
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
