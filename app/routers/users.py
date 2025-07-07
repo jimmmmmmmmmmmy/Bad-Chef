@@ -29,11 +29,21 @@ async def login(request: LoginRequest, session: Session = Depends(get_session)):
 @router.post("/", response_model=UserResponse)
 async def create_user(user: UserCreate, session: Session = Depends(get_session)):
     """Creates a new user in database."""
+    # Check if username already exists
+    existing_user_by_username = session.exec(select(User).where(User.username == user.username)).first()
+    if existing_user_by_username:
+        raise HTTPException(status_code=409, detail="Username already registered")
+
+    # Check if email already exists
+    existing_user_by_email = session.exec(select(User).where(User.email == user.email)).first()
+    if existing_user_by_email:
+        raise HTTPException(status_code=409, detail="Email already registered")
+
     db_user = User(username=user.username, email=user.email, hashed_password=pwd_context.hash(user.password))
     session.add(db_user)
     session.commit()
     session.refresh(db_user) # Reload the user to add auto-generated fields
-    return db_user  # Automatically maps to UserResponse
+    return db_user
 
 @router.get("/me", response_model=UserResponse)
 async def read_users_me(current_user: User = Depends(get_current_user)):

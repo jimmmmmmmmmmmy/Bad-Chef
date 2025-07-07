@@ -22,7 +22,7 @@ def create_db_and_tables(db_engine: Engine = engine):
         if not recipe_count:  # If empty, seed data
             # Load the JSON file
             # with open("./data/recipeData.json", "r") as file:
-            with open("./data/frenchcookingacademy.json", "r") as file:
+            with open("app/data/frenchcookingacademy.json", "r") as file:
                 recipes_data = json.load(file)
             
             # Add this for other Ollama parsed JSON files
