@@ -7,14 +7,14 @@ How to set up and run this locally
 3)	Create an `.env` file in `/frontend`and add VITE_BACKEND_URL, VITE_FRONTEND_URL 
 
 ```
-VITE_BACKEND_URL=http://localhost:8000   
-VITE_FRONTEND_URL=http://localhost:5173  
+VITE_BACKEND_URL='http://localhost:8000'   
+VITE_FRONTEND_URL='http://localhost:5173'  
 ```
 
 Create root `.env` file and add a secret key:
 
 ```
-SECRET_KEY=<your-random-hex-string>  # Generate via `openssl rand -hex 32`
+SECRET_KEY='<your-random-hex-string>'  # Generate via `openssl rand -hex 32`
 ```
 
 4)	Install frontend dependencies	`cd frontend; npm install`
